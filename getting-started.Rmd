@@ -1,0 +1,204 @@
+---
+title: "Essential R Programming"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+## Agenda
+
+- Basic Syntax
+- Built-in Data Structures
+- Intermediate Syntax
+
+# Basic Syntax
+
+## The symbol of assignment `<-`
+
+```{r}
+hello_msg <- "Hello from R!"
+hello_msg
+```
+
+## The symbol of comments `#`
+
+```{r}
+# Saying hello from R
+hello_msg <- "Hello from R!"
+hello_msg # print hello_msg to console
+```
+
+## Style guide for R programming
+
+<http://adv-r.had.co.nz/Style.html>
+
+## Useful built-in functions
+
+- `print()`
+- `help()`
+- `rm()`
+- `getwd()`
+- `sessionInfo()`
+
+## Common vector types
+
+- numeric
+- character
+- logical
+- Date
+
+## Numeric with length of 1
+
+```{r}
+numeric_vector <- 5566
+numeric_vector
+class(numeric_vector)
+length(numeric_vector)
+```
+
+## Numeric with length larger than 1
+
+```{r}
+numeric_vector <- c(5, 5, 6, 6) # using help(c) or ?c to check what c() function is
+numeric_vector
+class(numeric_vector)
+length(numeric_vector)
+```
+
+## Character with length of 1
+
+```{r}
+character_vector <- "五五六六"
+character_vector
+class(character_vector)
+length(character_vector)
+```
+
+## Character with length larger than 1
+
+```{r}
+character_vector <- c("五", "五", "六", "六")
+character_vector
+class(character_vector)
+length(character_vector)
+```
+
+## Logical with length of 1
+
+```{r}
+logical_vector <- TRUE
+logical_vector
+class(logical_vector)
+length(logical_vector)
+```
+
+## Date with length of 1
+
+```{r}
+date_vector <- Sys.Date()
+date_vector
+class(date_vector)
+length(date_vector)
+```
+
+## Date with length larger than 1
+
+```{r}
+date_vector <- c(Sys.Date(), Sys.Date() - 1, Sys.Date() - 2, Sys.Date() - 3)
+date_vector
+class(date_vector)
+length(date_vector)
+```
+
+## if statement
+
+```{r eval=FALSE}
+if (LOGICAL) {
+  # Codes written here will be ran once LOGICAL is evaluated as TRUE
+  # ...
+  # ...
+}
+```
+
+---
+
+```{r}
+wanna_fight <- TRUE
+if (wanna_fight) {
+  print("要打，就去練舞室打！")
+}
+```
+
+## if-else statement
+
+```{r eval=FALSE}
+if (LOGICAL) {
+  # Codes written here will be ran once LOGICAL is evaluated as TRUE
+} else {
+  # Codes written here will be ran once LOGICAL is evaluated as FALSE
+}
+```
+
+---
+
+```{r}
+wanna_fight <- FALSE
+if (wanna_fight) {
+  print("要打，就去練舞室打！")
+} else {
+  print("那就不要打架。")
+}
+```
+
+## if-else if-else statement
+
+```{r eval=FALSE}
+if (LOGICAL_1) {
+  # Codes written here will be ran once LOGICAL_1 is evaluated as TRUE
+} else if (LOGICAL_2) {
+  # Codes written here will be ran once LOGICAL_1 is evaluated as FALSE
+  # And LOGICAL_2 is evaluated as TRUE
+} else {
+  # Codes written here will be ran once both LOGICAL_1 and LOGICAL_2 are evaluated as TRUE
+}
+```
+
+---
+
+```{r}
+wanna_fight <- FALSE
+dancing_room_is_open <- FALSE
+if (wanna_fight) {
+  print("要打，先看練舞室有沒有開放。")
+} else if (dancing_room_is_open) {
+  print("要打，練舞室又有開放就去練舞室打！")
+} else {
+  print("那就不要打架。")
+}
+```
+
+# Built-in Data Structures
+
+## An overview of built-in data structures
+
+|Number of Dimensions|Homogeneous|Heterogeneous|
+|--------------------|-----------|-------------|
+|1|Vector|List|
+|2|Matrix|Data frame|
+|n|Array||
+
+# Intermediate Syntax
+
+## Iterating with `for`
+
+## Iterating with `while`
+
+## Defining functions
