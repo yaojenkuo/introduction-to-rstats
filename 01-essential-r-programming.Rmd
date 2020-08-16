@@ -13,12 +13,6 @@ output:
       slideNumber: true
 ---
 
-## Agenda
-
-- Basic Syntax
-- Built-in Data Structures
-- Intermediate Syntax
-
 # Basic Syntax
 
 ## The symbol of assignment `<-`

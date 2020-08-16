@@ -1,0 +1,99 @@
+---
+title: "Exploring Data in Statistics"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+## Agenda
+
+- Exploring univariate data
+- Exploring bivariate data
+- Exploring multivariate data
+
+# Exploring univariate data
+
+## Getting a vector with real-world data
+
+```{r message=FALSE}
+library(quantmod)
+
+start_date <- "2018-01-01"
+getSymbols(Symbols = "VTI", from = start_date) # create a VTI xts object in global environment
+vti <- as.vector(coredata(VTI$VTI.Close)) # extract close prices as a vector
+class(vti)
+```
+
+## Using `hist()` to explore the shape of numeric univariate data
+
+```{r}
+hist(vti, breaks = 30)
+```
+
+## Using density plot to explore the shape of numeric univariate data
+
+```{r}
+plot(density(vti))
+```
+
+## Combining histogram and density plot to explore the shape of numeric univariate data
+
+```{r}
+dens <- density(vti)
+hist(vti, probability = TRUE, breaks = 30)
+lines(dens)
+```
+
+## Using quantile plot to explore the shape of numeric univariate data
+
+```{r}
+qqnorm(vti)
+```
+
+## Using box plot to explore the shape of numeric univariate data
+
+```{r}
+boxplot(vti)
+```
+
+## Using bar plot to explore tabulating of categorical univariate data
+
+```{r}
+price_diff <- diff(vti)
+is_rise <- price_diff >= 0
+table_is_rise <- table(is_rise)
+```
+
+---
+
+```{r}
+barplot(table_is_rise, horiz = TRUE)
+```
+
+# Exploring bivariate data
+
+## Getting 2 vectors with real-world data
+
+```{r message=FALSE}
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+aapl <- as.vector(coredata(AAPL$AAPL.Close))
+amzn <- as.vector(coredata(AMZN$AMZN.Close))
+```
+
+## Using scatter to explore the relationship of numeric bivariate data
+
+```{r}
+plot(aapl, amzn)
+```
+
+# Exploring multivariate data

@@ -1,0 +1,377 @@
+---
+title: "Data in Statistics"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+# Univariate data
+
+## What is univariate data
+
+A univariate data set is a set of measurements for some variable from a collection of cases.
+
+$$
+x_1, x_2, ..., x_n
+$$
+
+## How do we use R for univariate data
+
+Vector.
+
+## Getting a vector with real-world data
+
+```{r message=FALSE}
+library(quantmod)
+
+start_date <- "2018-01-01"
+getSymbols(Symbols = "VTI", from = start_date) # create a VTI xts object in global environment
+vti <- as.vector(coredata(VTI$VTI.Adjusted)) # extract close prices as a vector
+class(vti)
+```
+
+## Summaries of a numeric vector
+
+- Center
+- Spread
+- Shape
+
+## Center: using `mean()` for sample mean
+
+$$
+sample \: mean = \bar{x} = \frac{1}{n}(x_1 + x_2 + ... + x_n) = \frac{1}{n}\sum_i x_i
+$$
+
+```{r}
+mean(vti)
+```
+
+## Center: using `median()` for sample median
+
+The middle value of the sorted vector.
+
+```{r}
+median(vti)
+```
+
+## Center: using `quantile()` for a generalized version of `median()`
+
+```{r}
+quantile(vti)
+```
+
+## Spread: using `range()` for the difference between the smallest and largest values
+
+```{r}
+range(vti)
+diff(range(vti))
+```
+
+## Spread: using `IQR` for interquantile range
+
+While range is an obvious measure of spread, but that it suffers from being effected by just one large or small value.
+
+```{r}
+IQR(vti)
+```
+
+## Spread: using `var()` for sample variance
+
+$$
+sample \; variance = s^2 = \frac{1}{n-1}\sum_i (x_i - \bar{x})^2
+$$
+
+```{r}
+var(vti)
+```
+
+## Spread: using `sd()` for sample standard deviation
+
+$$
+sample \; standard \; deviation = s = \sqrt{\frac{1}{n-1}\sum_i (x_i - \bar{x})^2}
+$$
+
+```{r}
+sd(vti)
+```
+
+## Spread: using `scale()` for z-scores
+
+$$
+\text{z-scores} = \frac{x_i - \bar{x}}{s}
+$$
+
+```{r}
+z_scores <- scale(vti)[,1]
+```
+
+## Spread: counting outlier proportion from z-scores
+
+```{r}
+outliers <- abs(z_scores) > 2
+outlier_proportion <- sum(outliers) / length(z_scores)
+outlier_proportion
+```
+
+## Shape: measuring sample skewness
+
+$$
+sample \; skewness = \frac{1}{n}\sum_i z_i^3
+$$
+
+## Shape: there is no built-in function for skewness in R
+
+```{r}
+skew <- function(x) {
+  n <- length(x)
+  z_scores <- scale(x)[,1]
+  return(sum(z_scores^3) / n)
+}
+skew(vti)
+```
+
+## Shape: measuring sample excess kurtosis
+
+$$
+sample \; excess \; kurtosis = \frac{1}{n}\sum_i z_i^4 - 3
+$$
+## Shape: there is no built-in function for excess kurtosis in R
+
+```{r}
+kurtosis <- function(x) {
+  n <- length(x)
+  z_scores <- scale(x)[,1]
+  return(sum(z_scores^4) / n - 3)
+}
+kurtosis(vti)
+```
+
+## Summaries of a categorical vector
+
+- Tabulating by frequencies
+- Tabulating by probabilities
+
+## Converting numeric vector to categorical
+
+```{r}
+price_diff <- diff(vti)
+is_rise <- price_diff >= 0
+```
+
+## Using `table()` function to tabulate data
+
+```{r}
+table(is_rise)
+prop.table(table(is_rise))
+```
+
+# Bivariate data
+
+## What is bivariate data
+
+A bivariate data set is a set of measurements for some variable from a collection of cases involving two attributes.
+
+$$
+x_1, x_2, ..., x_n \\
+y_1, y_2, ..., y_n
+$$
+
+## How do we use R for bivariate data
+
+Specifying 2 vectors.
+
+## Getting 2 vectors with real-world data
+
+```{r message=FALSE}
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+aapl <- as.vector(coredata(AAPL$AAPL.Adjusted))
+amzn <- as.vector(coredata(AMZN$AMZN.Adjusted))
+```
+
+## Data structures for 2 vectors
+
+- matrix
+- list
+- data.frame
+
+## Using matrix for 2 vectors
+
+```{r}
+aapl_amzn <- cbind(matrix(aapl), matrix(amzn))
+class(aapl_amzn)
+dim(aapl_amzn)
+```
+
+## Using list for 2 vectors
+
+```{r}
+aapl_amzn <- list(
+  aapl,
+  amzn
+)
+class(aapl_amzn)
+```
+
+## Using data.frame for 2 vectors
+
+```{r}
+aapl_amzn <- data.frame(
+  aapl,
+  amzn
+)
+class(aapl_amzn)
+dim(aapl_amzn)
+```
+
+## Summaries of 2 numeric vectors
+
+- Covariance
+- Correlation
+
+## Using `cov()` for covariance
+
+$$
+cov(x, y) = \frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y})
+$$
+
+```{r}
+cov(aapl, amzn)
+```
+
+## Using `cor()` for correlation
+
+$$
+cor(x, y) = \frac{cov(x, y)}{s_x s_y}
+$$
+
+```{r}
+cor(aapl, amzn)
+```
+
+## Summaries of 2 categorical vectors
+
+```{r}
+price_diff_aapl <- diff(aapl)
+price_diff_amzn <- diff(amzn)
+is_rise_aapl <- price_diff_aapl >= 0
+is_rise_amzn <- price_diff_amzn >= 0
+```
+
+## Using `table()` function to create frequency table
+
+```{r}
+freq_table <- table(is_rise_aapl, is_rise_amzn)
+freq_table
+```
+
+## Using `prop.table()` function to convert frequency table to a proportional table
+
+```{r}
+prop_table <- prop.table(freq_table)
+prop_table
+```
+
+## Using `addmargins()` function for summations
+
+```{r}
+addmargins(freq_table)
+addmargins(prop_table)
+```
+
+# Multivariate data
+
+## What is multivariate data
+
+A multivariate data set is a set of measurements for some variable from a collection of cases involving multiple attributes.
+
+## It is pretty much the same as in bivariate data
+
+## Just notice if the data has heterogeneous or homogeneous features
+
+- Use matrix for homogeneous features
+- Use list or data.frame for heterogeneous features
+
+## Use matrix for a homogeneous multivariate data
+
+```{r}
+amzn_matrix <- cbind(
+  matrix(AMZN$AMZN.Open),
+  matrix(AMZN$AMZN.High),
+  matrix(AMZN$AMZN.Low),
+  matrix(AMZN$AMZN.Close),
+  matrix(AMZN$AMZN.Adjusted),
+  matrix(AMZN$AMZN.Volume)
+)
+class(amzn_matrix)
+dim(amzn_matrix)
+```
+
+## Use data.frame for a heterogeneous multivariate data
+
+```{r}
+amzn_df <- data.frame(AMZN)
+```
+
+---
+
+```{r}
+class(amzn_df)
+dim(amzn_df)
+str(amzn_df)
+```
+
+---
+
+```{r}
+aapl_df <- data.frame(AAPL)
+```
+
+---
+
+```{r}
+class(aapl_df)
+dim(aapl_df)
+str(aapl_df)
+```
+
+## Combining 2 data.frame objects
+
+```{r}
+col_names <- c("Open", "High", "Low", "Close", "Volume", "Adjusted")
+trading_dates <- row.names(aapl_df)
+colnames(aapl_df) <- col_names
+colnames(amzn_df) <- col_names
+aapl_df$Ticker <- "AAPL"
+amzn_df$Ticker <- "AMZN"
+aapl_df$Ticker <- as.character(aapl_df$Ticker)
+amzn_df$Ticker <- as.character(amzn_df$Ticker)
+aapl_df$TradingDate <- trading_dates
+amzn_df$TradingDate <- trading_dates
+row.names(aapl_df) <- NULL
+row.names(amzn_df) <- NULL
+```
+
+---
+
+```{r}
+combined_df <- rbind(aapl_df, amzn_df)
+combined_df <- combined_df[c("TradingDate", "Ticker", "Open", "High", "Low", "Close", "Volume", "Adjusted")]
+head(combined_df)
+tail(combined_df)
+```
+
+---
+
+```{r}
+str(combined_df)
+```

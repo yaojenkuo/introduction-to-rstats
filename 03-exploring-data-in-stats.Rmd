@@ -1,0 +1,211 @@
+---
+title: "Exploring Data in Statistics"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+# Exploring Data in a Nutshell
+
+## The purpose of data exploration
+
+- Exploring shapes
+- Exploring correlations
+- Exploring ranks
+- Exploring trends
+
+## Basic plots for theses explorations
+
+- Exploring shapes via histogram / boxplot / quantile plot
+- Exploring correlations via scatter plot
+- Exploring ranks via bar plot
+- Exploring trends via line plot
+
+## Basic exploration tools in R
+
+- Base plotting system
+- ggplot2
+
+```{r}
+library(ggplot2)
+```
+
+# Exploring univariate data
+
+## Getting a vector with real-world data
+
+```{r message=FALSE}
+library(quantmod)
+
+start_date <- "2018-01-01"
+getSymbols(Symbols = "VTI", from = start_date) # create a VTI xts object in global environment
+vti <- as.vector(coredata(VTI$VTI.Close)) # extract close prices as a vector
+class(vti)
+```
+
+## Using `hist()` to explore the shape of numeric univariate data
+
+```{r}
+hist(vti, breaks = 30)
+```
+
+## Using density plot to explore the shape of numeric univariate data
+
+```{r}
+plot(density(vti))
+```
+
+## Combining histogram and density plot to explore the shape of numeric univariate data
+
+```{r}
+dens <- density(vti)
+hist(vti, probability = TRUE, breaks = 30)
+lines(dens)
+```
+
+## Using quantile plot to explore the shape of numeric univariate data
+
+```{r}
+qqnorm(vti)
+```
+
+## Using box plot to explore the shape of numeric univariate data
+
+```{r}
+boxplot(vti)
+```
+
+## Using bar plot to explore tabulating of categorical univariate data
+
+```{r}
+price_diff <- diff(vti)
+is_rise <- price_diff >= 0
+table_is_rise <- table(is_rise)
+```
+
+---
+
+```{r}
+barplot(table_is_rise, horiz = TRUE)
+```
+
+# Exploring bivariate data
+
+## Getting 2 vectors with real-world data
+
+```{r message=FALSE}
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+aapl <- as.vector(coredata(AAPL$AAPL.Close))
+amzn <- as.vector(coredata(AMZN$AMZN.Close))
+```
+
+## Using line plot to explore the trend of bivariate data
+
+---
+
+```{r}
+plot(AAPL$AAPL.Close)
+```
+
+---
+
+```{r}
+plot(AMZN$AMZN.Close)
+```
+
+## Using scatter plot to explore the relationship of numeric bivariate data
+
+---
+
+```{r}
+plot(aapl, amzn)
+```
+
+# Exploring multivariate data
+
+## Getting real-world multivariate data
+
+```{r message=FALSE}
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+aapl_df <- data.frame(AAPL)
+amzn_df <- data.frame(AMZN)
+```
+
+## Combining 2 data.frame objects
+
+```{r}
+col_names <- c("Open", "High", "Low", "Close", "Volume", "Adjusted")
+trading_dates <- row.names(aapl_df)
+colnames(aapl_df) <- col_names
+colnames(amzn_df) <- col_names
+aapl_df$Ticker <- "AAPL"
+amzn_df$Ticker <- "AMZN"
+aapl_df$Ticker <- as.character(aapl_df$Ticker)
+amzn_df$Ticker <- as.character(amzn_df$Ticker)
+aapl_df$TradingDate <- trading_dates
+amzn_df$TradingDate <- trading_dates
+row.names(aapl_df) <- NULL
+row.names(amzn_df) <- NULL
+```
+
+---
+
+```{r}
+combined_df <- rbind(aapl_df, amzn_df)
+combined_df <- combined_df[c("TradingDate", "Ticker", "Open", "High", "Low", "Close", "Volume", "Adjusted")]
+```
+
+## Using other aesthetics for multivariate data
+
+```{r}
+# different line colors
+combined_df$TradingDate <- as.Date(combined_df$TradingDate)
+p <- ggplot(combined_df, aes(x = TradingDate, y = Adjusted, col = Ticker)) +
+  geom_line()
+```
+
+---
+
+```{r}
+p
+```
+
+---
+
+```{r}
+# different dot colors
+p <- ggplot(combined_df, aes(x = Volume, y = Adjusted, col = Ticker)) + 
+  geom_point()
+```
+
+---
+
+```{r}
+p
+```
+
+---
+
+```{r}
+# different boxes
+p <- ggplot(combined_df, aes(x = Ticker, y = Adjusted, col = Ticker)) + 
+  geom_boxplot()
+```
+
+---
+
+```{r}
+p
+```

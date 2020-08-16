@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc">
   <meta name="author" content="郭耀仁 Yao-Jen Kuo" />
   <meta name="dcterms.date" content="2020-08-15" />
-  <title>Essential R Programming</title>
+  <title>Data in Statistics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1830,439 +1830,407 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 <section>
-    <h1 class="title">Essential R Programming</h1>
+    <h1 class="title">Data in Statistics</h1>
     <h2 class="author">郭耀仁 Yao-Jen Kuo</h2>
     <h3 class="date">2020-08-15</h3>
 </section>
 
 <section>
-<section id="basic-syntax" class="title-slide slide level1">
-<h1>Basic Syntax</h1>
+<section id="univariate-data" class="title-slide slide level1">
+<h1>Univariate data</h1>
 
 </section>
-<section id="the-symbol-of-assignment--" class="slide level2">
-<h2>The symbol of assignment <code>&lt;-</code></h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>hello_msg &lt;-<span class="st"> &quot;Hello from R!&quot;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>hello_msg</span></code></pre></div>
-<pre><code>## [1] &quot;Hello from R!&quot;</code></pre>
+<section id="what-is-univariate-data" class="slide level2">
+<h2>What is univariate data</h2>
+<p>A univariate data set is a set of measurements for some variable from a collection of cases.</p>
+<p><span class="math display">\[
+x_1, x_2, ..., x_n
+\]</span></p>
 </section>
-<section id="the-symbol-of-comments" class="slide level2">
-<h2>The symbol of comments <code>#</code></h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Saying hello from R</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>hello_msg &lt;-<span class="st"> &quot;Hello from R!&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>hello_msg <span class="co"># print hello_msg to console</span></span></code></pre></div>
-<pre><code>## [1] &quot;Hello from R!&quot;</code></pre>
+<section id="how-do-we-use-r-for-univariate-data" class="slide level2">
+<h2>How do we use R for univariate data</h2>
+<p>Vector.</p>
 </section>
-<section id="style-guide-for-r-programming" class="slide level2">
-<h2>Style guide for R programming</h2>
-<p><a href="http://adv-r.had.co.nz/Style.html" class="uri">http://adv-r.had.co.nz/Style.html</a></p>
+<section id="getting-a-vector-with-real-world-data" class="slide level2">
+<h2>Getting a vector with real-world data</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(quantmod)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>start_date &lt;-<span class="st"> &quot;2018-01-01&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">getSymbols</span>(<span class="dt">Symbols =</span> <span class="st">&quot;VTI&quot;</span>, <span class="dt">from =</span> start_date) <span class="co"># create a VTI xts object in global environment</span></span></code></pre></div>
+<pre><code>## [1] &quot;VTI&quot;</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>vti &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">coredata</span>(VTI<span class="op">$</span>VTI.Adjusted)) <span class="co"># extract close prices as a vector</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">class</span>(vti)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
 </section>
-<section id="useful-built-in-functions" class="slide level2">
-<h2>Useful built-in functions</h2>
+<section id="summaries-of-a-numeric-vector" class="slide level2">
+<h2>Summaries of a numeric vector</h2>
 <ul>
-<li><code>print()</code></li>
-<li><code>help()</code></li>
-<li><code>class()</code></li>
-<li><code>rm()</code></li>
-<li><code>getwd()</code></li>
-<li><code>sessionInfo()</code></li>
+<li>Center</li>
+<li>Spread</li>
+<li>Shape</li>
 </ul>
 </section>
-<section id="common-vector-types" class="slide level2">
-<h2>Common vector types</h2>
+<section id="center-using-mean-for-sample-mean" class="slide level2">
+<h2>Center: using <code>mean()</code> for sample mean</h2>
+<p><span class="math display">\[
+sample \: mean = \bar{x} = \frac{1}{n}(x_1 + x_2 + ... + x_n) = \frac{1}{n}\sum_i x_i
+\]</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">mean</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 143.5554</code></pre>
+</section>
+<section id="center-using-median-for-sample-median" class="slide level2">
+<h2>Center: using <code>median()</code> for sample median</h2>
+<p>The middle value of the sorted vector.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">median</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 142.3314</code></pre>
+</section>
+<section id="center-using-quantile-for-a-generalized-version-of-median" class="slide level2">
+<h2>Center: using <code>quantile()</code> for a generalized version of <code>median()</code></h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">quantile</span>(vti)</span></code></pre></div>
+<pre><code>##       0%      25%      50%      75%     100% 
+## 110.8523 135.0537 142.3314 150.0626 171.1600</code></pre>
+</section>
+<section id="spread-using-range-for-the-difference-between-the-smallest-and-largest-values" class="slide level2">
+<h2>Spread: using <code>range()</code> for the difference between the smallest and largest values</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">range</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 110.8523 171.1600</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">diff</span>(<span class="kw">range</span>(vti))</span></code></pre></div>
+<pre><code>## [1] 60.30775</code></pre>
+</section>
+<section id="spread-using-iqr-for-interquantile-range" class="slide level2">
+<h2>Spread: using <code>IQR</code> for interquantile range</h2>
+<p>While range is an obvious measure of spread, but that it suffers from being effected by just one large or small value.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">IQR</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 15.00895</code></pre>
+</section>
+<section id="spread-using-var-for-sample-variance" class="slide level2">
+<h2>Spread: using <code>var()</code> for sample variance</h2>
+<p><span class="math display">\[
+sample \; variance = s^2 = \frac{1}{n-1}\sum_i (x_i - \bar{x})^2
+\]</span></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">var</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 130.4728</code></pre>
+</section>
+<section id="spread-using-sd-for-sample-standard-deviation" class="slide level2">
+<h2>Spread: using <code>sd()</code> for sample standard deviation</h2>
+<p><span class="math display">\[
+sample \; standard \; deviation = s = \sqrt{\frac{1}{n-1}\sum_i (x_i - \bar{x})^2}
+\]</span></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">sd</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 11.42247</code></pre>
+</section>
+<section id="spread-using-scale-for-z-scores" class="slide level2">
+<h2>Spread: using <code>scale()</code> for z-scores</h2>
+<p><span class="math display">\[
+\text{z-scores} = \frac{x_i - \bar{x}}{s}
+\]</span></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>z_scores &lt;-<span class="st"> </span><span class="kw">scale</span>(vti)[,<span class="dv">1</span>]</span></code></pre></div>
+</section>
+<section id="spread-counting-outlier-proportion-from-z-scores" class="slide level2">
+<h2>Spread: counting outlier proportion from z-scores</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>outliers &lt;-<span class="st"> </span><span class="kw">abs</span>(z_scores) <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>outlier_proportion &lt;-<span class="st"> </span><span class="kw">sum</span>(outliers) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(z_scores)</span>
+<span id="cb22-3"><a href="#cb22-3"></a>outlier_proportion</span></code></pre></div>
+<pre><code>## [1] 0.05151515</code></pre>
+</section>
+<section id="shape-measuring-sample-skewness" class="slide level2">
+<h2>Shape: measuring sample skewness</h2>
+<p><span class="math display">\[
+sample \; skewness = \frac{1}{n}\sum_i z_i^3
+\]</span></p>
+</section>
+<section id="shape-there-is-no-built-in-function-for-skewness-in-r" class="slide level2">
+<h2>Shape: there is no built-in function for skewness in R</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>skew &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  n &lt;-<span class="st"> </span><span class="kw">length</span>(x)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  z_scores &lt;-<span class="st"> </span><span class="kw">scale</span>(x)[,<span class="dv">1</span>]</span>
+<span id="cb24-4"><a href="#cb24-4"></a>  <span class="kw">return</span>(<span class="kw">sum</span>(z_scores<span class="op">^</span><span class="dv">3</span>) <span class="op">/</span><span class="st"> </span>n)</span>
+<span id="cb24-5"><a href="#cb24-5"></a>}</span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="kw">skew</span>(vti)</span></code></pre></div>
+<pre><code>## [1] 0.4123971</code></pre>
+</section>
+<section id="shape-measuring-sample-excess-kurtosis" class="slide level2">
+<h2>Shape: measuring sample excess kurtosis</h2>
+<p><span class="math display">\[
+sample \; excess \; kurtosis = \frac{1}{n}\sum_i z_i^4 - 3
+\]</span> ## Shape: there is no built-in function for excess kurtosis in R</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>kurtosis &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb26-2"><a href="#cb26-2"></a>  n &lt;-<span class="st"> </span><span class="kw">length</span>(x)</span>
+<span id="cb26-3"><a href="#cb26-3"></a>  z_scores &lt;-<span class="st"> </span><span class="kw">scale</span>(x)[,<span class="dv">1</span>]</span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="kw">return</span>(<span class="kw">sum</span>(z_scores<span class="op">^</span><span class="dv">4</span>) <span class="op">/</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span><span class="dv">3</span>)</span>
+<span id="cb26-5"><a href="#cb26-5"></a>}</span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="kw">kurtosis</span>(vti)</span></code></pre></div>
+<pre><code>## [1] -0.2516059</code></pre>
+</section>
+<section id="summaries-of-a-categorical-vector" class="slide level2">
+<h2>Summaries of a categorical vector</h2>
 <ul>
-<li>numeric</li>
-<li>character</li>
-<li>logical</li>
-<li>Date</li>
+<li>Tabulating by frequencies</li>
+<li>Tabulating by probabilities</li>
 </ul>
 </section>
-<section id="numeric-with-length-of-1" class="slide level2">
-<h2>Numeric with length of 1</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>numeric_vector &lt;-<span class="st"> </span><span class="dv">5566</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>numeric_vector</span></code></pre></div>
-<pre><code>## [1] 5566</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span>(numeric_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">length</span>(numeric_vector)</span></code></pre></div>
-<pre><code>## [1] 1</code></pre>
+<section id="converting-numeric-vector-to-categorical" class="slide level2">
+<h2>Converting numeric vector to categorical</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>price_diff &lt;-<span class="st"> </span><span class="kw">diff</span>(vti)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>is_rise &lt;-<span class="st"> </span>price_diff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></span></code></pre></div>
 </section>
-<section id="numeric-with-length-larger-than-1" class="slide level2">
-<h2>Numeric with length larger than 1</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>numeric_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>) <span class="co"># using help(c) or ?c to check what c() function is</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>numeric_vector</span></code></pre></div>
-<pre><code>## [1] 5 5 6 6</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">class</span>(numeric_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">length</span>(numeric_vector)</span></code></pre></div>
-<pre><code>## [1] 4</code></pre>
-</section>
-<section id="character-with-length-of-1" class="slide level2">
-<h2>Character with length of 1</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>character_vector &lt;-<span class="st"> &quot;五五六六&quot;</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>character_vector</span></code></pre></div>
-<pre><code>## [1] &quot;五五六六&quot;</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">class</span>(character_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">length</span>(character_vector)</span></code></pre></div>
-<pre><code>## [1] 1</code></pre>
-</section>
-<section id="character-with-length-larger-than-1" class="slide level2">
-<h2>Character with length larger than 1</h2>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>character_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;五&quot;</span>, <span class="st">&quot;五&quot;</span>, <span class="st">&quot;六&quot;</span>, <span class="st">&quot;六&quot;</span>)</span>
-<span id="cb23-2"><a href="#cb23-2"></a>character_vector</span></code></pre></div>
-<pre><code>## [1] &quot;五&quot; &quot;五&quot; &quot;六&quot; &quot;六&quot;</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">class</span>(character_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">length</span>(character_vector)</span></code></pre></div>
-<pre><code>## [1] 4</code></pre>
-</section>
-<section id="logical-with-length-of-1" class="slide level2">
-<h2>Logical with length of 1</h2>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>logical_vector &lt;-<span class="st"> </span><span class="ot">TRUE</span></span>
-<span id="cb29-2"><a href="#cb29-2"></a>logical_vector</span></code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">class</span>(logical_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;logical&quot;</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">length</span>(logical_vector)</span></code></pre></div>
-<pre><code>## [1] 1</code></pre>
-</section>
-<section id="date-with-length-of-1" class="slide level2">
-<h2>Date with length of 1</h2>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>date_vector &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>()</span>
-<span id="cb35-2"><a href="#cb35-2"></a>date_vector</span></code></pre></div>
-<pre><code>## [1] &quot;2020-08-15&quot;</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">class</span>(date_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;Date&quot;</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">length</span>(date_vector)</span></code></pre></div>
-<pre><code>## [1] 1</code></pre>
-</section>
-<section id="date-with-length-larger-than-1" class="slide level2">
-<h2>Date with length larger than 1</h2>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>date_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">Sys.Date</span>(), <span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span><span class="dv">2</span>, <span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span><span class="dv">3</span>)</span>
-<span id="cb41-2"><a href="#cb41-2"></a>date_vector</span></code></pre></div>
-<pre><code>## [1] &quot;2020-08-15&quot; &quot;2020-08-14&quot; &quot;2020-08-13&quot; &quot;2020-08-12&quot;</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">class</span>(date_vector)</span></code></pre></div>
-<pre><code>## [1] &quot;Date&quot;</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">length</span>(date_vector)</span></code></pre></div>
-<pre><code>## [1] 4</code></pre>
-</section>
-<section id="if-statement" class="slide level2">
-<h2>if statement</h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="cf">if</span> (LOGICAL) {</span>
-<span id="cb47-2"><a href="#cb47-2"></a>  <span class="co"># Codes written here will be ran once LOGICAL is evaluated as TRUE</span></span>
-<span id="cb47-3"><a href="#cb47-3"></a>  <span class="co"># ...</span></span>
-<span id="cb47-4"><a href="#cb47-4"></a>  <span class="co"># ...</span></span>
-<span id="cb47-5"><a href="#cb47-5"></a>}</span></code></pre></div>
-</section>
-<section class="slide level2">
-
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>wanna_fight &lt;-<span class="st"> </span><span class="ot">TRUE</span></span>
-<span id="cb48-2"><a href="#cb48-2"></a><span class="cf">if</span> (wanna_fight) {</span>
-<span id="cb48-3"><a href="#cb48-3"></a>  <span class="kw">print</span>(<span class="st">&quot;要打，就去練舞室打！&quot;</span>)</span>
-<span id="cb48-4"><a href="#cb48-4"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;要打，就去練舞室打！&quot;</code></pre>
-</section>
-<section id="if-else-statement" class="slide level2">
-<h2>if-else statement</h2>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="cf">if</span> (LOGICAL) {</span>
-<span id="cb50-2"><a href="#cb50-2"></a>  <span class="co"># Codes written here will be ran once LOGICAL is evaluated as TRUE</span></span>
-<span id="cb50-3"><a href="#cb50-3"></a>} <span class="cf">else</span> {</span>
-<span id="cb50-4"><a href="#cb50-4"></a>  <span class="co"># Codes written here will be ran once LOGICAL is evaluated as FALSE</span></span>
-<span id="cb50-5"><a href="#cb50-5"></a>}</span></code></pre></div>
-</section>
-<section class="slide level2">
-
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>wanna_fight &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
-<span id="cb51-2"><a href="#cb51-2"></a><span class="cf">if</span> (wanna_fight) {</span>
-<span id="cb51-3"><a href="#cb51-3"></a>  <span class="kw">print</span>(<span class="st">&quot;要打，就去練舞室打！&quot;</span>)</span>
-<span id="cb51-4"><a href="#cb51-4"></a>} <span class="cf">else</span> {</span>
-<span id="cb51-5"><a href="#cb51-5"></a>  <span class="kw">print</span>(<span class="st">&quot;那就不要打架。&quot;</span>)</span>
-<span id="cb51-6"><a href="#cb51-6"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;那就不要打架。&quot;</code></pre>
-</section>
-<section id="if-else-if-else-statement" class="slide level2">
-<h2>if-else if-else statement</h2>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a><span class="cf">if</span> (LOGICAL_<span class="dv">1</span>) {</span>
-<span id="cb53-2"><a href="#cb53-2"></a>  <span class="co"># Codes written here will be ran once LOGICAL_1 is evaluated as TRUE</span></span>
-<span id="cb53-3"><a href="#cb53-3"></a>} <span class="cf">else</span> <span class="cf">if</span> (LOGICAL_<span class="dv">2</span>) {</span>
-<span id="cb53-4"><a href="#cb53-4"></a>  <span class="co"># Codes written here will be ran once LOGICAL_1 is evaluated as FALSE</span></span>
-<span id="cb53-5"><a href="#cb53-5"></a>  <span class="co"># And LOGICAL_2 is evaluated as TRUE</span></span>
-<span id="cb53-6"><a href="#cb53-6"></a>} <span class="cf">else</span> {</span>
-<span id="cb53-7"><a href="#cb53-7"></a>  <span class="co"># Codes written here will be ran once both LOGICAL_1 and LOGICAL_2 are evaluated as TRUE</span></span>
-<span id="cb53-8"><a href="#cb53-8"></a>}</span></code></pre></div>
-</section>
-<section class="slide level2">
-
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>wanna_fight &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
-<span id="cb54-2"><a href="#cb54-2"></a>dancing_room_is_open &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
-<span id="cb54-3"><a href="#cb54-3"></a><span class="cf">if</span> (wanna_fight) {</span>
-<span id="cb54-4"><a href="#cb54-4"></a>  <span class="kw">print</span>(<span class="st">&quot;要打，先看練舞室有沒有開放。&quot;</span>)</span>
-<span id="cb54-5"><a href="#cb54-5"></a>} <span class="cf">else</span> <span class="cf">if</span> (dancing_room_is_open) {</span>
-<span id="cb54-6"><a href="#cb54-6"></a>  <span class="kw">print</span>(<span class="st">&quot;要打，練舞室又有開放就去練舞室打！&quot;</span>)</span>
-<span id="cb54-7"><a href="#cb54-7"></a>} <span class="cf">else</span> {</span>
-<span id="cb54-8"><a href="#cb54-8"></a>  <span class="kw">print</span>(<span class="st">&quot;那就不要打架。&quot;</span>)</span>
-<span id="cb54-9"><a href="#cb54-9"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;那就不要打架。&quot;</code></pre>
+<section id="using-table-function-to-tabulate-data" class="slide level2">
+<h2>Using <code>table()</code> function to tabulate data</h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">table</span>(is_rise)</span></code></pre></div>
+<pre><code>## is_rise
+## FALSE  TRUE 
+##   283   376</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">prop.table</span>(<span class="kw">table</span>(is_rise))</span></code></pre></div>
+<pre><code>## is_rise
+##     FALSE      TRUE 
+## 0.4294385 0.5705615</code></pre>
 </section></section>
 <section>
-<section id="built-in-data-structures" class="title-slide slide level1">
-<h1>Built-in Data Structures</h1>
+<section id="bivariate-data" class="title-slide slide level1">
+<h1>Bivariate data</h1>
 
 </section>
-<section id="an-overview-of-built-in-data-structures" class="slide level2">
-<h2>An overview of built-in data structures</h2>
-<table>
-<thead>
-<tr class="header">
-<th>Number of Dimensions</th>
-<th>Homogeneous</th>
-<th>Heterogeneous</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>Vector</td>
-<td>List</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>Matrix</td>
-<td>Data frame</td>
-</tr>
-<tr class="odd">
-<td>n</td>
-<td>Array</td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<section id="what-is-bivariate-data" class="slide level2">
+<h2>What is bivariate data</h2>
+<p>A bivariate data set is a set of measurements for some variable from a collection of cases involving two attributes.</p>
+<p><span class="math display">\[
+x_1, x_2, ..., x_n \\
+y_1, y_2, ..., y_n
+\]</span></p>
 </section>
-<section id="using-functions-to-create-various-data-structures" class="slide level2">
-<h2>Using functions to create various data structures</h2>
+<section id="how-do-we-use-r-for-bivariate-data" class="slide level2">
+<h2>How do we use R for bivariate data</h2>
+<p>Specifying 2 vectors.</p>
 </section>
-<section id="using-list-to-create-lists" class="slide level2">
-<h2>Using <code>list()</code> to create lists</h2>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>my_list &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb56-2"><a href="#cb56-2"></a>  <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>),</span>
-<span id="cb56-3"><a href="#cb56-3"></a>  <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">FALSE</span>),</span>
-<span id="cb56-4"><a href="#cb56-4"></a>  <span class="st">&quot;五五六六&quot;</span></span>
-<span id="cb56-5"><a href="#cb56-5"></a>)</span>
-<span id="cb56-6"><a href="#cb56-6"></a>my_list</span></code></pre></div>
-<pre><code>## [[1]]
-## [1] 5 5 6 6
-## 
-## [[2]]
-## [1]  TRUE  TRUE FALSE FALSE
-## 
-## [[3]]
-## [1] &quot;五五六六&quot;</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="kw">class</span>(my_list)</span></code></pre></div>
+<section id="getting-2-vectors-with-real-world-data" class="slide level2">
+<h2>Getting 2 vectors with real-world data</h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>start_date &lt;-<span class="st"> &quot;2018-01-01&quot;</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">getSymbols</span>(<span class="dt">Symbols =</span> <span class="st">&quot;AAPL&quot;</span>, <span class="dt">from =</span> start_date) <span class="co"># create a AAPL xts object in global environment</span></span></code></pre></div>
+<pre><code>## [1] &quot;AAPL&quot;</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">getSymbols</span>(<span class="dt">Symbols =</span> <span class="st">&quot;AMZN&quot;</span>, <span class="dt">from =</span> start_date) <span class="co"># create a AMZN xts object in global environment</span></span></code></pre></div>
+<pre><code>## [1] &quot;AMZN&quot;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>aapl &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">coredata</span>(AAPL<span class="op">$</span>AAPL.Adjusted))</span>
+<span id="cb37-2"><a href="#cb37-2"></a>amzn &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">coredata</span>(AMZN<span class="op">$</span>AMZN.Adjusted))</span></code></pre></div>
+</section>
+<section id="data-structures-for-2-vectors" class="slide level2">
+<h2>Data structures for 2 vectors</h2>
+<ul>
+<li>matrix</li>
+<li>list</li>
+<li>data.frame</li>
+</ul>
+</section>
+<section id="using-matrix-for-2-vectors" class="slide level2">
+<h2>Using matrix for 2 vectors</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>aapl_amzn &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">matrix</span>(aapl), <span class="kw">matrix</span>(amzn))</span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="kw">class</span>(aapl_amzn)</span></code></pre></div>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">dim</span>(aapl_amzn)</span></code></pre></div>
+<pre><code>## [1] 660   2</code></pre>
+</section>
+<section id="using-list-for-2-vectors" class="slide level2">
+<h2>Using list for 2 vectors</h2>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>aapl_amzn &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb42-2"><a href="#cb42-2"></a>  aapl,</span>
+<span id="cb42-3"><a href="#cb42-3"></a>  amzn</span>
+<span id="cb42-4"><a href="#cb42-4"></a>)</span>
+<span id="cb42-5"><a href="#cb42-5"></a><span class="kw">class</span>(aapl_amzn)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 </section>
-<section id="using-matrix-to-create-matrices" class="slide level2">
-<h2>Using <code>matrix()</code> to create matrices</h2>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>my_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb60-2"><a href="#cb60-2"></a>my_matrix</span></code></pre></div>
-<pre><code>##      [,1] [,2]
-## [1,]    1    4
-## [2,]    2    5
-## [3,]    3    6</code></pre>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="kw">class</span>(my_matrix)</span></code></pre></div>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
-</section>
-<section id="using-data.frame-to-create-data-frames" class="slide level2">
-<h2>Using <code>data.frame()</code> to create data frames</h2>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>my_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb64-2"><a href="#cb64-2"></a>  <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;The Shawshank Redemption&quot;</span>, <span class="st">&quot;The Dark Knight&quot;</span>, <span class="st">&quot;Forrest Gump&quot;</span>, <span class="st">&quot;Inception&quot;</span>),</span>
-<span id="cb64-3"><a href="#cb64-3"></a>  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1994</span>, <span class="dv">2008</span>, <span class="dv">1994</span>, <span class="dv">2010</span>),</span>
-<span id="cb64-4"><a href="#cb64-4"></a>  <span class="dt">imdb_rating =</span> <span class="kw">c</span>(<span class="fl">9.2</span>, <span class="dv">9</span>, <span class="fl">8.8</span>, <span class="fl">8.7</span>)</span>
-<span id="cb64-5"><a href="#cb64-5"></a>)</span>
-<span id="cb64-6"><a href="#cb64-6"></a>my_df</span></code></pre></div>
-<pre><code>##                      title year imdb_rating
-## 1 The Shawshank Redemption 1994         9.2
-## 2          The Dark Knight 2008         9.0
-## 3             Forrest Gump 1994         8.8
-## 4                Inception 2010         8.7</code></pre>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="kw">class</span>(my_df)</span></code></pre></div>
+<section id="using-data.frame-for-2-vectors" class="slide level2">
+<h2>Using data.frame for 2 vectors</h2>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>aapl_amzn &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb44-2"><a href="#cb44-2"></a>  aapl,</span>
+<span id="cb44-3"><a href="#cb44-3"></a>  amzn</span>
+<span id="cb44-4"><a href="#cb44-4"></a>)</span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="kw">class</span>(aapl_amzn)</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="kw">dim</span>(aapl_amzn)</span></code></pre></div>
+<pre><code>## [1] 660   2</code></pre>
 </section>
-<section id="using-array-to-create-arrays" class="slide level2">
-<h2>Using <code>array()</code> to create arrays</h2>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>my_array &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">24</span>, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
-<span id="cb68-2"><a href="#cb68-2"></a>my_array</span></code></pre></div>
-<pre><code>## , , 1
-## 
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-## 
-## , , 2
-## 
-##      [,1] [,2] [,3]
-## [1,]   13   17   21
-## [2,]   14   18   22
-## [3,]   15   19   23
-## [4,]   16   20   24</code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="kw">class</span>(my_array)</span></code></pre></div>
-<pre><code>## [1] &quot;array&quot;</code></pre>
+<section id="summaries-of-2-numeric-vectors" class="slide level2">
+<h2>Summaries of 2 numeric vectors</h2>
+<ul>
+<li>Covariance</li>
+<li>Correlation</li>
+</ul>
+</section>
+<section id="using-cov-for-covariance" class="slide level2">
+<h2>Using <code>cov()</code> for covariance</h2>
+<p><span class="math display">\[
+cov(x, y) = \frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y})
+\]</span></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="kw">cov</span>(aapl, amzn)</span></code></pre></div>
+<pre><code>## [1] 21958.94</code></pre>
+</section>
+<section id="using-cor-for-correlation" class="slide level2">
+<h2>Using <code>cor()</code> for correlation</h2>
+<p><span class="math display">\[
+cor(x, y) = \frac{cov(x, y)}{s_x s_y}
+\]</span></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="kw">cor</span>(aapl, amzn)</span></code></pre></div>
+<pre><code>## [1] 0.8750298</code></pre>
+</section>
+<section id="summaries-of-2-categorical-vectors" class="slide level2">
+<h2>Summaries of 2 categorical vectors</h2>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>price_diff_aapl &lt;-<span class="st"> </span><span class="kw">diff</span>(aapl)</span>
+<span id="cb52-2"><a href="#cb52-2"></a>price_diff_amzn &lt;-<span class="st"> </span><span class="kw">diff</span>(amzn)</span>
+<span id="cb52-3"><a href="#cb52-3"></a>is_rise_aapl &lt;-<span class="st"> </span>price_diff_aapl <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></span>
+<span id="cb52-4"><a href="#cb52-4"></a>is_rise_amzn &lt;-<span class="st"> </span>price_diff_amzn <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></span></code></pre></div>
+</section>
+<section id="using-table-function-to-create-frequency-table" class="slide level2">
+<h2>Using <code>table()</code> function to create frequency table</h2>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>freq_table &lt;-<span class="st"> </span><span class="kw">table</span>(is_rise_aapl, is_rise_amzn)</span>
+<span id="cb53-2"><a href="#cb53-2"></a>freq_table</span></code></pre></div>
+<pre><code>##             is_rise_amzn
+## is_rise_aapl FALSE TRUE
+##        FALSE   196  100
+##        TRUE     92  271</code></pre>
+</section>
+<section id="using-prop.table-function-to-convert-frequency-table-to-a-proportional-table" class="slide level2">
+<h2>Using <code>prop.table()</code> function to convert frequency table to a proportional table</h2>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>prop_table &lt;-<span class="st"> </span><span class="kw">prop.table</span>(freq_table)</span>
+<span id="cb55-2"><a href="#cb55-2"></a>prop_table</span></code></pre></div>
+<pre><code>##             is_rise_amzn
+## is_rise_aapl     FALSE      TRUE
+##        FALSE 0.2974203 0.1517451
+##        TRUE  0.1396055 0.4112291</code></pre>
+</section>
+<section id="using-addmargins-function-for-summations" class="slide level2">
+<h2>Using <code>addmargins()</code> function for summations</h2>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="kw">addmargins</span>(freq_table)</span></code></pre></div>
+<pre><code>##             is_rise_amzn
+## is_rise_aapl FALSE TRUE Sum
+##        FALSE   196  100 296
+##        TRUE     92  271 363
+##        Sum     288  371 659</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">addmargins</span>(prop_table)</span></code></pre></div>
+<pre><code>##             is_rise_amzn
+## is_rise_aapl     FALSE      TRUE       Sum
+##        FALSE 0.2974203 0.1517451 0.4491654
+##        TRUE  0.1396055 0.4112291 0.5508346
+##        Sum   0.4370258 0.5629742 1.0000000</code></pre>
 </section></section>
 <section>
-<section id="intermediate-syntax" class="title-slide slide level1">
-<h1>Intermediate Syntax</h1>
+<section id="multivariate-data" class="title-slide slide level1">
+<h1>Multivariate data</h1>
 
 </section>
-<section id="using-to-index-a-vector" class="slide level2">
-<h2>Using <code>[]</code> to index a vector</h2>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>numeric_vector &lt;-<span class="st"> </span><span class="dv">6</span><span class="op">:</span><span class="dv">10</span></span>
-<span id="cb72-2"><a href="#cb72-2"></a>numeric_vector[<span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>numeric_vector[<span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## [1] 7</code></pre>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>numeric_vector[<span class="dv">3</span>]</span></code></pre></div>
-<pre><code>## [1] 8</code></pre>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>numeric_vector[<span class="dv">4</span>]</span></code></pre></div>
-<pre><code>## [1] 9</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>numeric_vector[<span class="dv">5</span>]</span></code></pre></div>
-<pre><code>## [1] 10</code></pre>
+<section id="what-is-multivariate-data" class="slide level2">
+<h2>What is multivariate data</h2>
+<p>A multivariate data set is a set of measurements for some variable from a collection of cases involving multiple attributes.</p>
 </section>
-<section id="using-to-index-a-list" class="slide level2">
-<h2>Using <code>[[]]</code> to index a list</h2>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>my_list &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb82-2"><a href="#cb82-2"></a>  <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;The Shawshank Redemption&quot;</span>, <span class="st">&quot;The Dark Knight&quot;</span>, <span class="st">&quot;Forrest Gump&quot;</span>, <span class="st">&quot;Inception&quot;</span>),</span>
-<span id="cb82-3"><a href="#cb82-3"></a>  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1994</span>, <span class="dv">2008</span>, <span class="dv">1994</span>, <span class="dv">2010</span>),</span>
-<span id="cb82-4"><a href="#cb82-4"></a>  <span class="dt">imdb_rating =</span> <span class="kw">c</span>(<span class="fl">9.2</span>, <span class="dv">9</span>, <span class="fl">8.8</span>, <span class="fl">8.7</span>)</span>
-<span id="cb82-5"><a href="#cb82-5"></a>)</span>
-<span id="cb82-6"><a href="#cb82-6"></a>my_list[[<span class="dv">1</span>]] <span class="co"># my_list[[&quot;title&quot;]]</span></span></code></pre></div>
-<pre><code>## [1] &quot;The Shawshank Redemption&quot; &quot;The Dark Knight&quot;         
-## [3] &quot;Forrest Gump&quot;             &quot;Inception&quot;</code></pre>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a>my_list[[<span class="dv">2</span>]] <span class="co"># my_list[[&quot;year&quot;]]</span></span></code></pre></div>
-<pre><code>## [1] 1994 2008 1994 2010</code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>my_list[[<span class="dv">3</span>]] <span class="co"># my_list[[&quot;imdb_rating&quot;]]</span></span></code></pre></div>
-<pre><code>## [1] 9.2 9.0 8.8 8.7</code></pre>
+<section id="it-is-pretty-much-the-same-as-in-bivariate-data" class="slide level2">
+<h2>It is pretty much the same as in bivariate data</h2>
 </section>
-<section id="iterating-with-for" class="slide level2">
-<h2>Iterating with <code>for</code></h2>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="cf">for</span> (i <span class="cf">in</span> ITERABLE) {</span>
-<span id="cb88-2"><a href="#cb88-2"></a>  <span class="co"># Codes written here will be ran repeatedly</span></span>
-<span id="cb88-3"><a href="#cb88-3"></a>  <span class="co"># until i reaches the end of ITERABLE</span></span>
-<span id="cb88-4"><a href="#cb88-4"></a>}</span></code></pre></div>
+<section id="just-notice-if-the-data-has-heterogeneous-or-homogeneous-features" class="slide level2">
+<h2>Just notice if the data has heterogeneous or homogeneous features</h2>
+<ul>
+<li>Use matrix for homogeneous features</li>
+<li>Use list or data.frame for heterogeneous features</li>
+</ul>
 </section>
-<section id="iterating-over-a-vector-with-for" class="slide level2">
-<h2>Iterating over a vector with <code>for</code></h2>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a>numeric_vector &lt;-<span class="st"> </span><span class="dv">6</span><span class="op">:</span><span class="dv">10</span></span>
-<span id="cb89-2"><a href="#cb89-2"></a><span class="cf">for</span> (i <span class="cf">in</span> numeric_vector) {</span>
-<span id="cb89-3"><a href="#cb89-3"></a>  <span class="kw">print</span>(i)</span>
-<span id="cb89-4"><a href="#cb89-4"></a>}</span></code></pre></div>
-<pre><code>## [1] 6
-## [1] 7
-## [1] 8
-## [1] 9
-## [1] 10</code></pre>
+<section id="use-matrix-for-a-homogeneous-multivariate-data" class="slide level2">
+<h2>Use matrix for a homogeneous multivariate data</h2>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>amzn_matrix &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb61-2"><a href="#cb61-2"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.Open),</span>
+<span id="cb61-3"><a href="#cb61-3"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.High),</span>
+<span id="cb61-4"><a href="#cb61-4"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.Low),</span>
+<span id="cb61-5"><a href="#cb61-5"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.Close),</span>
+<span id="cb61-6"><a href="#cb61-6"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.Adjusted),</span>
+<span id="cb61-7"><a href="#cb61-7"></a>  <span class="kw">matrix</span>(AMZN<span class="op">$</span>AMZN.Volume)</span>
+<span id="cb61-8"><a href="#cb61-8"></a>)</span>
+<span id="cb61-9"><a href="#cb61-9"></a><span class="kw">class</span>(amzn_matrix)</span></code></pre></div>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">dim</span>(amzn_matrix)</span></code></pre></div>
+<pre><code>## [1] 660   6</code></pre>
 </section>
-<section id="iterating-over-a-list-with-for" class="slide level2">
-<h2>Iterating over a list with <code>for</code></h2>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>my_list &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb91-2"><a href="#cb91-2"></a>  <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;The Shawshank Redemption&quot;</span>, <span class="st">&quot;The Dark Knight&quot;</span>, <span class="st">&quot;Forrest Gump&quot;</span>, <span class="st">&quot;Inception&quot;</span>),</span>
-<span id="cb91-3"><a href="#cb91-3"></a>  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1994</span>, <span class="dv">2008</span>, <span class="dv">1994</span>, <span class="dv">2010</span>),</span>
-<span id="cb91-4"><a href="#cb91-4"></a>  <span class="dt">imdb_rating =</span> <span class="kw">c</span>(<span class="fl">9.2</span>, <span class="dv">9</span>, <span class="fl">8.8</span>, <span class="fl">8.7</span>)</span>
-<span id="cb91-5"><a href="#cb91-5"></a>)</span>
-<span id="cb91-6"><a href="#cb91-6"></a><span class="cf">for</span> (i <span class="cf">in</span> my_list) {</span>
-<span id="cb91-7"><a href="#cb91-7"></a>  <span class="kw">print</span>(i)</span>
-<span id="cb91-8"><a href="#cb91-8"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;The Shawshank Redemption&quot; &quot;The Dark Knight&quot;         
-## [3] &quot;Forrest Gump&quot;             &quot;Inception&quot;               
-## [1] 1994 2008 1994 2010
-## [1] 9.2 9.0 8.8 8.7</code></pre>
+<section id="use-data.frame-for-a-heterogeneous-multivariate-data" class="slide level2">
+<h2>Use data.frame for a heterogeneous multivariate data</h2>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>amzn_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(AMZN)</span></code></pre></div>
 </section>
-<section id="iterating-with-while" class="slide level2">
-<h2>Iterating with <code>while</code></h2>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>i &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb93-2"><a href="#cb93-2"></a><span class="cf">while</span> (LOGICAL) {</span>
-<span id="cb93-3"><a href="#cb93-3"></a>  <span class="co"># Codes written here will be ran repeatedly</span></span>
-<span id="cb93-4"><a href="#cb93-4"></a>  <span class="co"># until i reaches the end of ITERABLE</span></span>
-<span id="cb93-5"><a href="#cb93-5"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb93-6"><a href="#cb93-6"></a>}</span></code></pre></div>
+<section class="slide level2">
+
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="kw">class</span>(amzn_df)</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="kw">dim</span>(amzn_df)</span></code></pre></div>
+<pre><code>## [1] 660   6</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="kw">str</span>(amzn_df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    660 obs. of  6 variables:
+##  $ AMZN.Open    : num  1172 1188 1205 1218 1236 ...
+##  $ AMZN.High    : num  1190 1205 1216 1229 1253 ...
+##  $ AMZN.Low     : num  1171 1188 1205 1210 1232 ...
+##  $ AMZN.Close   : num  1189 1204 1210 1229 1247 ...
+##  $ AMZN.Volume  : num  2694500 3108800 3022100 3544700 4279500 ...
+##  $ AMZN.Adjusted: num  1189 1204 1210 1229 1247 ...</code></pre>
 </section>
-<section id="iterating-over-a-vector-with-while" class="slide level2">
-<h2>Iterating over a vector with <code>while</code></h2>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>numeric_vector &lt;-<span class="st"> </span><span class="dv">6</span><span class="op">:</span><span class="dv">10</span></span>
-<span id="cb94-2"><a href="#cb94-2"></a>i &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb94-3"><a href="#cb94-3"></a><span class="cf">while</span> (i <span class="op">&lt;=</span><span class="st"> </span><span class="kw">length</span>(numeric_vector)) {</span>
-<span id="cb94-4"><a href="#cb94-4"></a>  <span class="kw">print</span>(numeric_vector[i])</span>
-<span id="cb94-5"><a href="#cb94-5"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb94-6"><a href="#cb94-6"></a>}</span></code></pre></div>
-<pre><code>## [1] 6
-## [1] 7
-## [1] 8
-## [1] 9
-## [1] 10</code></pre>
+<section class="slide level2">
+
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>aapl_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(AAPL)</span></code></pre></div>
 </section>
-<section id="iterating-over-a-list-with-while" class="slide level2">
-<h2>Iterating over a list with <code>while</code></h2>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>my_list &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb96-2"><a href="#cb96-2"></a>  <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;The Shawshank Redemption&quot;</span>, <span class="st">&quot;The Dark Knight&quot;</span>, <span class="st">&quot;Forrest Gump&quot;</span>, <span class="st">&quot;Inception&quot;</span>),</span>
-<span id="cb96-3"><a href="#cb96-3"></a>  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1994</span>, <span class="dv">2008</span>, <span class="dv">1994</span>, <span class="dv">2010</span>),</span>
-<span id="cb96-4"><a href="#cb96-4"></a>  <span class="dt">imdb_rating =</span> <span class="kw">c</span>(<span class="fl">9.2</span>, <span class="dv">9</span>, <span class="fl">8.8</span>, <span class="fl">8.7</span>)</span>
-<span id="cb96-5"><a href="#cb96-5"></a>)</span>
-<span id="cb96-6"><a href="#cb96-6"></a>i &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb96-7"><a href="#cb96-7"></a><span class="cf">while</span> (i <span class="op">&lt;=</span><span class="st"> </span><span class="kw">length</span>(my_list)) {</span>
-<span id="cb96-8"><a href="#cb96-8"></a>  <span class="kw">print</span>(my_list[[i]])</span>
-<span id="cb96-9"><a href="#cb96-9"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb96-10"><a href="#cb96-10"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;The Shawshank Redemption&quot; &quot;The Dark Knight&quot;         
-## [3] &quot;Forrest Gump&quot;             &quot;Inception&quot;               
-## [1] 1994 2008 1994 2010
-## [1] 9.2 9.0 8.8 8.7</code></pre>
+<section class="slide level2">
+
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a><span class="kw">class</span>(aapl_df)</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a><span class="kw">dim</span>(aapl_df)</span></code></pre></div>
+<pre><code>## [1] 660   6</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="kw">str</span>(aapl_df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    660 obs. of  6 variables:
+##  $ AAPL.Open    : num  170 173 173 173 174 ...
+##  $ AAPL.High    : num  172 175 173 175 176 ...
+##  $ AAPL.Low     : num  169 172 172 173 174 ...
+##  $ AAPL.Close   : num  172 172 173 175 174 ...
+##  $ AAPL.Volume  : num  25555900 29517900 22434600 23660000 20567800 ...
+##  $ AAPL.Adjusted: num  166 166 167 169 168 ...</code></pre>
 </section>
-<section id="defining-functions" class="slide level2">
-<h2>Defining functions</h2>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a>function_name &lt;-<span class="st"> </span><span class="cf">function</span>(INPUT_<span class="dv">1</span>, INPUT_<span class="dv">2</span>, INPUT_<span class="dv">3</span>, ...) {</span>
-<span id="cb98-2"><a href="#cb98-2"></a>  <span class="co"># Codes written here can be ran once the function is called</span></span>
-<span id="cb98-3"><a href="#cb98-3"></a>  <span class="co"># ...</span></span>
-<span id="cb98-4"><a href="#cb98-4"></a>  <span class="co"># ...</span></span>
-<span id="cb98-5"><a href="#cb98-5"></a>  <span class="kw">return</span>(OUTPUT)</span>
-<span id="cb98-6"><a href="#cb98-6"></a>}</span></code></pre></div>
+<section id="combining-2-data.frame-objects" class="slide level2">
+<h2>Combining 2 data.frame objects</h2>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>col_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Open&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Close&quot;</span>, <span class="st">&quot;Volume&quot;</span>, <span class="st">&quot;Adjusted&quot;</span>)</span>
+<span id="cb79-2"><a href="#cb79-2"></a>trading_dates &lt;-<span class="st"> </span><span class="kw">row.names</span>(aapl_df)</span>
+<span id="cb79-3"><a href="#cb79-3"></a><span class="kw">colnames</span>(aapl_df) &lt;-<span class="st"> </span>col_names</span>
+<span id="cb79-4"><a href="#cb79-4"></a><span class="kw">colnames</span>(amzn_df) &lt;-<span class="st"> </span>col_names</span>
+<span id="cb79-5"><a href="#cb79-5"></a>aapl_df<span class="op">$</span>Ticker &lt;-<span class="st"> &quot;AAPL&quot;</span></span>
+<span id="cb79-6"><a href="#cb79-6"></a>amzn_df<span class="op">$</span>Ticker &lt;-<span class="st"> &quot;AMZN&quot;</span></span>
+<span id="cb79-7"><a href="#cb79-7"></a>aapl_df<span class="op">$</span>Ticker &lt;-<span class="st"> </span><span class="kw">as.character</span>(aapl_df<span class="op">$</span>Ticker)</span>
+<span id="cb79-8"><a href="#cb79-8"></a>amzn_df<span class="op">$</span>Ticker &lt;-<span class="st"> </span><span class="kw">as.character</span>(amzn_df<span class="op">$</span>Ticker)</span>
+<span id="cb79-9"><a href="#cb79-9"></a>aapl_df<span class="op">$</span>TradingDate &lt;-<span class="st"> </span>trading_dates</span>
+<span id="cb79-10"><a href="#cb79-10"></a>amzn_df<span class="op">$</span>TradingDate &lt;-<span class="st"> </span>trading_dates</span>
+<span id="cb79-11"><a href="#cb79-11"></a><span class="kw">row.names</span>(aapl_df) &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb79-12"><a href="#cb79-12"></a><span class="kw">row.names</span>(amzn_df) &lt;-<span class="st"> </span><span class="ot">NULL</span></span></code></pre></div>
 </section>
-<section id="defining-a-function-to-convert-celsius-to-fahrenheit" class="slide level2">
-<h2>Defining a function to convert celsius to fahrenheit</h2>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>celsius_to_fahrenheit &lt;-<span class="st"> </span><span class="cf">function</span>(degree) {</span>
-<span id="cb99-2"><a href="#cb99-2"></a>  degree_f &lt;-<span class="st"> </span>degree <span class="op">*</span><span class="st"> </span><span class="dv">9</span><span class="op">/</span><span class="dv">5</span> <span class="op">+</span><span class="st"> </span><span class="dv">32</span></span>
-<span id="cb99-3"><a href="#cb99-3"></a>  <span class="kw">return</span>(degree_f)</span>
-<span id="cb99-4"><a href="#cb99-4"></a>}</span>
-<span id="cb99-5"><a href="#cb99-5"></a><span class="kw">celsius_to_fahrenheit</span>(<span class="dv">30</span>)</span></code></pre></div>
-<pre><code>## [1] 86</code></pre>
+<section class="slide level2">
+
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>combined_df &lt;-<span class="st"> </span><span class="kw">rbind</span>(aapl_df, amzn_df)</span>
+<span id="cb80-2"><a href="#cb80-2"></a>combined_df &lt;-<span class="st"> </span>combined_df[<span class="kw">c</span>(<span class="st">&quot;TradingDate&quot;</span>, <span class="st">&quot;Ticker&quot;</span>, <span class="st">&quot;Open&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Close&quot;</span>, <span class="st">&quot;Volume&quot;</span>, <span class="st">&quot;Adjusted&quot;</span>)]</span>
+<span id="cb80-3"><a href="#cb80-3"></a><span class="kw">head</span>(combined_df)</span></code></pre></div>
+<pre><code>##   TradingDate Ticker   Open   High    Low  Close   Volume Adjusted
+## 1  2018-01-02   AAPL 170.16 172.30 169.26 172.26 25555900 166.0543
+## 2  2018-01-03   AAPL 172.53 174.55 171.96 172.23 29517900 166.0254
+## 3  2018-01-04   AAPL 172.54 173.47 172.08 173.03 22434600 166.7966
+## 4  2018-01-05   AAPL 173.44 175.37 173.05 175.00 23660000 168.6956
+## 5  2018-01-08   AAPL 174.35 175.61 173.93 174.35 20567800 168.0690
+## 6  2018-01-09   AAPL 174.55 175.06 173.41 174.33 21584000 168.0497</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a><span class="kw">tail</span>(combined_df)</span></code></pre></div>
+<pre><code>##      TradingDate Ticker    Open    High     Low   Close  Volume Adjusted
+## 1315  2020-08-07   AMZN 3224.01 3240.81 3140.67 3167.46 3929600  3167.46
+## 1316  2020-08-10   AMZN 3170.31 3172.51 3101.52 3148.16 3167300  3148.16
+## 1317  2020-08-11   AMZN 3113.20 3159.22 3073.00 3080.67 3718100  3080.67
+## 1318  2020-08-12   AMZN 3108.00 3174.39 3101.42 3162.24 3527200  3162.24
+## 1319  2020-08-13   AMZN 3182.99 3217.52 3155.00 3161.02 3149000  3161.02
+## 1320  2020-08-14   AMZN 3178.18 3178.24 3120.00 3148.02 2749200  3148.02</code></pre>
 </section>
-<section id="applying-a-function-over-a-vector" class="slide level2">
-<h2>Applying a function over a vector</h2>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>celsius_degrees &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">:</span><span class="dv">35</span></span>
-<span id="cb101-2"><a href="#cb101-2"></a><span class="kw">celsius_to_fahrenheit</span>(celsius_degrees)</span></code></pre></div>
-<pre><code>## [1] 86.0 87.8 89.6 91.4 93.2 95.0</code></pre>
-</section>
-<section id="applying-a-function-over-a-list" class="slide level2">
-<h2>Applying a function over a list</h2>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a>celsius_degrees &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">30</span>, <span class="dv">31</span>, <span class="dv">32</span>, <span class="dv">33</span>, <span class="dv">34</span>, <span class="dv">35</span>)</span>
-<span id="cb103-2"><a href="#cb103-2"></a><span class="kw">lapply</span>(celsius_degrees, <span class="dt">FUN=</span>celsius_to_fahrenheit) <span class="co"># lapply as in list apply</span></span></code></pre></div>
-<pre><code>## [[1]]
-## [1] 86
-## 
-## [[2]]
-## [1] 87.8
-## 
-## [[3]]
-## [1] 89.6
-## 
-## [[4]]
-## [1] 91.4
-## 
-## [[5]]
-## [1] 93.2
-## 
-## [[6]]
-## [1] 95</code></pre>
+<section class="slide level2">
+
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="kw">str</span>(combined_df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    1320 obs. of  8 variables:
+##  $ TradingDate: chr  &quot;2018-01-02&quot; &quot;2018-01-03&quot; &quot;2018-01-04&quot; &quot;2018-01-05&quot; ...
+##  $ Ticker     : chr  &quot;AAPL&quot; &quot;AAPL&quot; &quot;AAPL&quot; &quot;AAPL&quot; ...
+##  $ Open       : num  170 173 173 173 174 ...
+##  $ High       : num  172 175 173 175 176 ...
+##  $ Low        : num  169 172 172 173 174 ...
+##  $ Close      : num  172 172 173 175 174 ...
+##  $ Volume     : num  25555900 29517900 22434600 23660000 20567800 ...
+##  $ Adjusted   : num  166 166 167 169 168 ...</code></pre>
 </section></section>
     </div>
   </div>
