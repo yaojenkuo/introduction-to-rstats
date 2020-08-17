@@ -27,4 +27,4 @@
 
 ## 課程錄影清單
 
-- [330 期假日專題班，台大資工系 204 教室，台大資訊系統訓練班]()
+- [330 期假日專題班，台大資工系 204 教室，台大資訊系統訓練班](https://www.youtube.com/playlist?list=PLEq7iw5uOtuUCcEpHpznqBdbla6X6vSit)
