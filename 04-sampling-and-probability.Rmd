@@ -1,0 +1,184 @@
+---
+title: "Sampling and Probability"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+# The measure of chances
+
+## The definition of probability
+
+$$
+P(Event) = \frac{\text{Number of ways event can happen}}{\text{Total number of ways event can happen}}
+$$
+
+## Flipping a coin
+
+```{r}
+coin <- c("Head", "Tail")
+sample(coin, size = 1, replace = TRUE)
+```
+
+## Rolling a dice for 2 times
+
+```{r}
+dice <- 1:6
+sample(dice, size = 2, replace = TRUE)
+```
+
+## The `replace` argument
+
+- `replace = TRUE` refers to independent events
+- `replace = FALSE` refers to dependent events
+
+## Independent vs. dependent events
+
+- Events are independent if the probability of the latter isn't affected by the outcome of the previous, e.g. flipping coin and rolling dice
+- Events are dependent if the probability of the latter is affected by the outcome of the previous, e.g. dealing cards
+
+## Dealing poker cards
+
+```{r}
+generate_poker_deck <- function() {
+  suits <- c("Spades", "Hearts", "Diamonds", "Clubs")
+  ranks <- c("Ace", 2:10, "Jack", "Queen", "King")
+  poker_deck <- c()
+  for (s in suits) {
+    for (r in ranks) {
+      card <- sprintf("%s of %s", r, s)
+      poker_deck <- c(poker_deck, card)
+    }
+  }
+  return(poker_deck)
+}
+poker_deck <- generate_poker_deck()
+sample(poker_deck, size = 13, replace = FALSE)
+```
+
+# Binomial distribution
+
+## Flipping `size` coin(s) for `n` time(s) with built-in function `rbinom()`
+
+```{r}
+rbinom(n = 1, size = 1, prob = 0.5)  # single flip, single time
+rbinom(n = 3, size = 1, prob = 0.5)  # single flip, many times
+rbinom(n = 1, size = 3, prob = 0.5)  # many flips, single time
+rbinom(n = 20, size = 3, prob = 0.5) # many flips, many times
+```
+
+## Other associated built-in functions for binomial distribution
+
+- `dbinom()`
+- `pbinom()`
+
+## `dbinom()` function measures the probability of getting `x` successes out of `size` trials
+
+```{r}
+dbinom(x = 0, size = 10, prob = 0.5) # the probability of getting 0 head out of 10 times of single flip
+dbinom(x = 1, size = 10, prob = 0.5) # the probability of getting 1 head out of 10 times of single flip
+dbinom(x = 2, size = 10, prob = 0.5) # the probability of getting 2 heads out of 10 times of single flip
+```
+
+---
+
+```{r}
+n_head <- 0:10
+n_head_probs <- dbinom(x = n_head, size = 10, prob = 0.5)
+barplot(n_head_probs, names.arg = n_head, ylim = c(0, 0.25), main = "Probability of getting n heads out of 10 times")
+```
+
+## `pbinom()` function measures the probability of getting less than or equal to `x` successes out of `size` trials
+
+```{r}
+pbinom(q = 0, size = 10, prob = 0.5) # the probability of getting less than or equal to 0 head out of 10 times of trials
+pbinom(q = 1, size = 10, prob = 0.5) # the probability of getting less than or equal to 0 head out of 10 times of trials
+dbinom(x = 0, size = 10, prob = 0.5) + dbinom(x = 1, size = 10, prob = 0.5)
+```
+
+## What if we want to measure the probability of getting more than `x` successes out of `size` trials
+
+```{r}
+1 - pbinom(q = 1, size = 10, prob = 0.5)
+pbinom(q = 1, size = 10, prob = 0.5, lower.tail = FALSE)
+```
+
+# Law of Large Number
+
+## As the size of sample increases, the sample mean will approach the expected value
+
+## The possibility of flipping a head
+
+$$
+P(Head) = 50 \%
+$$
+
+## Flipping a coin for 10 times
+
+```{r}
+coin_flips <- rbinom(10, size = 1, prob = 0.5)
+p_head <- sum(coin_flips) / length(coin_flips)
+p_head
+```
+
+## Flipping a coin for 100 times
+
+```{r}
+coin_flips <- rbinom(100, size = 1, prob = 0.5)
+p_head <- sum(coin_flips) / length(coin_flips)
+p_head
+```
+
+## Flipping a coin for 1000 times
+
+```{r}
+coin_flips <- rbinom(1000, size = 1, prob = 0.5)
+p_head <- sum(coin_flips) / length(coin_flips)
+p_head
+```
+
+## The average points of rolling a dice
+
+```{r}
+mean(1:6)
+```
+
+## Rolling a dice for 10 times
+
+```{r}
+dice <- 1:6
+dice_rolls <- sample(dice, size = 10, replace = TRUE)
+mean(dice_rolls)
+hist(dice_rolls, breaks = 0:6)
+```
+
+## Rolling a dice for 100 times
+
+```{r}
+dice_rolls <- sample(dice, size = 100, replace = TRUE)
+mean(dice_rolls)
+hist(dice_rolls, breaks = 0:6)
+```
+
+## Rolling a dice for 1000 times
+
+```{r}
+dice_rolls <- sample(dice, size = 100, replace = TRUE)
+mean(dice_rolls)
+hist(dice_rolls, breaks = 0:6)
+```
+
+# Probability rules
+
+
+
+# Probability puzzle: Yahtzee
+
