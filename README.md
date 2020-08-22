@@ -8,7 +8,7 @@
 
 ## 課程環境
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/yaojenkuo/introduction-to-rstats/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/yaojenkuo/introduction-to-rstats/master?urlpath=rstudio)
 
 ## 課程大綱
 
