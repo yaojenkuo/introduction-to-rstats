@@ -13,137 +13,306 @@ output:
       slideNumber: true
 ---
 
-# Univariate data
+# What is statistical analysis
 
-## What is univariate data
+## Commons of statistical analysis
 
-A univariate data set is a set of measurements for some variable from a collection of cases.
+- The practice and study of collecting and analyzing data
+- A fact about or summary of some data
 
-$$
-x_1, x_2, ..., x_n
-$$
+## Types of statistical analysis
 
-## How do we use R for univariate data
+- Descriptive statistics: Describe and summarize (population) data
+- Inferential statistics: Use a sample of data to make inferencesabout a larger population
 
-Vector.
+## Types of data
 
-## Getting a vector with real-world data
+- Numerical data
+- Categorical data
+
+## Dimensions of data
+
+- Univariate data
+- Bivariate data
+- Multivariate data
+
+## Real world data: AAPL
 
 ```{r message=FALSE}
 library(quantmod)
 
 start_date <- "2018-01-01"
-getSymbols(Symbols = "VTI", from = start_date) # create a VTI xts object in global environment
-vti <- as.vector(coredata(VTI$VTI.Adjusted)) # extract close prices as a vector
-class(vti)
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
 ```
+
+# Numerical data
+
+## Numerical data: continuous(measured)
+
+```{r}
+aapl <- as.vector(coredata(AAPL$AAPL.Adjusted)) # extract adjusted price as a vector
+class(aapl)
+```
+
+## Numerical data: discrete(counted)
+
+The rises and falls of AAPL.
+
+```{r}
+aapl_is_rise <- as.numeric(diff(aapl) >= 0)
+class(aapl_is_rise)
+aapl_is_rise[1:5]
+```
+
+## Categorical data: nominal
+
+```{r}
+tickers <- c("AAPL", "AMZN", "TSLA")
+class(tickers)
+```
+
+## Categorical data: ordered
+
+```{r}
+suggestions_char <- c("Strong sell", "Sell", "Hold", "Buy", "Strong buy")
+suggestions <- factor(suggestions_char, ordered = TRUE, levels = suggestions_char)
+class(suggestions)
+suggestions
+as.numeric(suggestions)
+```
+
+# Univariate data
+
+## How do we use R for univariate data
+
+Vector.
+
+$$
+x_1, x_2, ..., x_n
+$$
 
 ## Summaries of a numeric vector
 
-- Center
-- Spread
-- Shape
+- Measures of center
+- Measures of spread
+- Measures of shape
 
-## Center: using `mean()` for sample mean
+## Measures of center
+
+- `mean()`
+- `median()`
+- `quantile()`
+
+## `mean()` function
 
 $$
-sample \: mean = \bar{x} = \frac{1}{n}(x_1 + x_2 + ... + x_n) = \frac{1}{n}\sum_i x_i
+\bar{x} = \frac{1}{n}(x_1 + x_2 + ... + x_n) = \frac{1}{n}\sum_i x_i
 $$
+
+---
 
 ```{r}
-mean(vti)
+my_mean <- function(x) {
+  n <- length(x)
+  summation <- sum(x)
+  return(summation / n)
+}
 ```
 
-## Center: using `median()` for sample median
+---
+
+```{r}
+my_mean(aapl)
+mean(aapl)
+```
+
+---
+
+## `median()` function
 
 The middle value of the sorted vector.
 
 ```{r}
-median(vti)
+my_median <- function(x) {
+  n <- length(x)
+  sorted_x <- sort(x)
+  middle_index <- n %/% 2 + 1 # floor divide
+  if (n %% 2 == 1) { # modulo
+    return(sorted_x[middle_index])
+  } else {
+    middle_indices <- c(middle_index - 1, middle_index)
+    middle_values <- sorted_x[middle_indices]
+    return(sum(middle_values) / 2)
+  }
+}
 ```
 
-## Center: using `quantile()` for a generalized version of `median()`
+---
 
 ```{r}
-quantile(vti)
+my_median(aapl)
+median(aapl)
 ```
 
-## Spread: using `range()` for the difference between the smallest and largest values
+## `quantile()` function
+
+A more generalized version of `median()` function.
 
 ```{r}
-range(vti)
-diff(range(vti))
+quantile(aapl)
 ```
 
-## Spread: using `IQR` for interquantile range
+## Measures of spread
 
-While range is an obvious measure of spread, but that it suffers from being effected by just one large or small value.
+- `range()` function
+- `IQR()` function
+- `var()` function
+- `sd()` function
+- `scale()` function
+
+## `range()` function
+
+The difference between the smallest and largest values.
 
 ```{r}
-IQR(vti)
+max(aapl) - min(aapl)
+diff(range(aapl))
 ```
 
-## Spread: using `var()` for sample variance
+## `IQR()` function
+
+The difference between 75% quantile and 25% quantile, which prevents being affected by just one large or small value.
+
+```{r}
+aapl_quantile <- quantile(aapl)
+unname(aapl_quantile["75%"] - aapl_quantile["25%"])
+IQR(aapl)
+```
+
+## Outlier
+
+Data point that is substantially different from the others.
 
 $$
-sample \; variance = s^2 = \frac{1}{n-1}\sum_i (x_i - \bar{x})^2
+data < Q1−1.5 \times IQR \\
+data > Q3+1.5 \times IQR
 $$
+
+## Finding outliers
 
 ```{r}
-var(vti)
+lower_threshold <- quantile(aapl, 0.25) - 1.5 * IQR(aapl)
+upper_threshold <- quantile(aapl, 0.75) + 1.5 * IQR(aapl)
+unname(lower_threshold)
+unname(upper_threshold)
+aapl[aapl < lower_threshold | aapl > upper_threshold]
 ```
 
-## Spread: using `sd()` for sample standard deviation
+## `var()` function
+
+Average distance from each data point to the data's mean.
 
 $$
-sample \; standard \; deviation = s = \sqrt{\frac{1}{n-1}\sum_i (x_i - \bar{x})^2}
+s^2 = \frac{1}{n-1}\sum_i (x_i - \bar{x})^2
 $$
+
+---
 
 ```{r}
-sd(vti)
+my_var <- function(x) {
+  n <- length(x)
+  x_bar <- mean(x)
+  squared_error <- (x - x_bar)**2
+  sum_squared_error <- sum(squared_error)
+  variance <- sum_squared_error / (n - 1)
+  return(variance)
+}
 ```
 
-## Spread: using `scale()` for z-scores
+---
+
+```{r}
+my_var(aapl)
+var(aapl)
+```
+
+## `sd()`function
+
+$$
+s = \sqrt{\frac{1}{n-1}\sum_i (x_i - \bar{x})^2}
+$$
+
+---
+
+```{r}
+my_sd <- function(x) {
+  return(sqrt(my_var(x)))
+}
+```
+
+---
+
+```{r}
+my_sd(aapl)
+sd(aapl)
+```
+
+## `scale()` function
 
 $$
 \text{z-scores} = \frac{x_i - \bar{x}}{s}
 $$
 
+---
+
 ```{r}
-z_scores <- scale(vti)[,1]
+my_scale <- function(x) {
+  x_bar <- mean(x)
+  s <- sd(x)
+  z_scores <- (x - x_bar) / s
+  return(z_scores)
+}
 ```
 
-## Spread: counting outlier proportion from z-scores
+---
 
 ```{r}
-outliers <- abs(z_scores) > 2
-outlier_proportion <- sum(outliers) / length(z_scores)
-outlier_proportion
+my_scale(aapl)[1:5]
+scale(aapl)[1:5]
 ```
 
-## Shape: measuring sample skewness
+## Measures of shape
+
+- Skewness
+- Kurtosis
+
+## Skewness measures the degree of symmetry
+
+- Positive skewness means a right-tailed shape
+- Negative skewness means a left-tailed shape
 
 $$
-sample \; skewness = \frac{1}{n}\sum_i z_i^3
+Skewness = \frac{1}{n}\sum_i z_i^3
 $$
 
-## Shape: there is no built-in function for skewness in R
+---
 
 ```{r}
-skew <- function(x) {
+skewness <- function(x) {
   n <- length(x)
   z_scores <- scale(x)[,1]
   return(sum(z_scores^3) / n)
 }
-skew(vti)
+skewness(aapl)
 ```
 
-## Shape: measuring sample excess kurtosis
+## Kurtosis measures the amount of potential outliers
 
 $$
-sample \; excess \; kurtosis = \frac{1}{n}\sum_i z_i^4 - 3
+Kurtosis = \frac{1}{n}\sum_i z_i^4 - 3
 $$
-## Shape: there is no built-in function for excess kurtosis in R
+
+---
 
 ```{r}
 kurtosis <- function(x) {
@@ -151,7 +320,7 @@ kurtosis <- function(x) {
   z_scores <- scale(x)[,1]
   return(sum(z_scores^4) / n - 3)
 }
-kurtosis(vti)
+kurtosis(aapl)
 ```
 
 ## Summaries of a categorical vector
@@ -162,7 +331,7 @@ kurtosis(vti)
 ## Converting numeric vector to categorical
 
 ```{r}
-price_diff <- diff(vti)
+price_diff <- diff(aapl)
 is_rise <- price_diff >= 0
 ```
 
@@ -244,7 +413,24 @@ $$
 cov(x, y) = \frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y})
 $$
 
+---
+
 ```{r}
+my_cov <- function(x, y) {
+  x_bar <- mean(x)
+  y_bar <- mean(y)
+  n <- length(x)
+  error <- (x - x_bar)*(y-y_bar)
+  sum_error <- sum(error)
+  covariance <- sum_error / (n-1)
+  return(covariance)
+}
+```
+
+---
+
+```{r}
+my_cov(aapl, amzn)
 cov(aapl, amzn)
 ```
 
@@ -254,7 +440,22 @@ $$
 cor(x, y) = \frac{cov(x, y)}{s_x s_y}
 $$
 
+---
+
 ```{r}
+my_cor <- function(x, y) {
+  cov_xy <- my_cov(x, y)
+  sd_x <- my_sd(x)
+  sd_y <- my_sd(y)
+  correlation <- cov_xy / (sd_x*sd_y)
+  return(correlation)
+}
+```
+
+---
+
+```{r}
+my_cor(aapl, amzn)
 cor(aapl, amzn)
 ```
 
@@ -294,14 +495,12 @@ addmargins(prop_table)
 
 A multivariate data set is a set of measurements for some variable from a collection of cases involving multiple attributes.
 
-## It is pretty much the same as in bivariate data
-
 ## Just notice if the data has heterogeneous or homogeneous features
 
-- Use matrix for homogeneous features
-- Use list or data.frame for heterogeneous features
+- matrix for homogeneous features
+- list or data.frame for heterogeneous features
 
-## Use matrix for a homogeneous multivariate data
+## Using matrix for a homogeneous multivariate data
 
 ```{r}
 amzn_matrix <- cbind(
@@ -316,7 +515,7 @@ class(amzn_matrix)
 dim(amzn_matrix)
 ```
 
-## Use data.frame for a heterogeneous multivariate data
+## Using data.frame for a heterogeneous multivariate data
 
 ```{r}
 amzn_df <- data.frame(AMZN)
@@ -374,4 +573,23 @@ tail(combined_df)
 
 ```{r}
 str(combined_df)
+```
+
+## Real world data: Covid 19 daily report
+
+```{r}
+read_daily_report <- function(file_date) {
+  file_date_str <- format(file_date, "%m-%d-%Y")
+  file_url <- sprintf("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/%s.csv", file_date_str)
+  daily_report <- read.csv(file_url, stringsAsFactors = FALSE)
+  return(daily_report)
+}
+sys_date <- Sys.Date() - 2
+daily_report <- read_daily_report(sys_date)
+```
+
+---
+
+```{r}
+str(daily_report)
 ```

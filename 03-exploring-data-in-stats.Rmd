@@ -38,18 +38,58 @@ output:
 library(ggplot2)
 ```
 
-# Exploring univariate data
-
-## Getting a vector with real-world data
+## Getting real-world data: VTI
 
 ```{r message=FALSE}
 library(quantmod)
 
 start_date <- "2018-01-01"
 getSymbols(Symbols = "VTI", from = start_date) # create a VTI xts object in global environment
-vti <- as.vector(coredata(VTI$VTI.Close)) # extract close prices as a vector
+vti <- as.vector(coredata(VTI$VTI.Adjusted)) # extract adjusted prices as a vector
 class(vti)
 ```
+
+## Getting real-world data: AAPL
+
+```{r message=FALSE}
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+aapl <- as.vector(coredata(AAPL$AAPL.Adjusted)) # extract adjusted prices as a vector
+class(aapl)
+```
+
+## Getting real-world data: AMZN
+
+```{r message=FALSE}
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+amzn <- as.vector(coredata(AMZN$AMZN.Adjusted))
+```
+
+## Getting real-world data: Covid 19 daily report
+
+```{r}
+read_daily_report <- function(file_date) {
+  file_date_str <- format(file_date, "%m-%d-%Y")
+  file_url <- sprintf("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/%s.csv", file_date_str)
+  daily_report <- read.csv(file_url, stringsAsFactors = FALSE)
+  return(daily_report)
+}
+sys_date <- Sys.Date() - 2
+daily_report <- read_daily_report(sys_date)
+```
+
+## Getting real-world data: Covid 19 time series
+
+```{r}
+read_time_series <- function() {
+  file_url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+  time_series <- read.csv(file_url, stringsAsFactors = FALSE)
+  return(time_series)
+}
+time_series <- read_time_series()
+``` 
+
+# Exploring univariate data
 
 ## Using `hist()` to explore the shape of numeric univariate data
 
@@ -57,10 +97,45 @@ class(vti)
 hist(vti, breaks = 30)
 ```
 
+---
+
+```{r}
+hist(aapl, breaks = 30)
+```
+
+---
+
+```{r}
+library(dplyr)
+
+confirmed_by_country <- daily_report %>% 
+  group_by(Country_Region) %>% 
+  summarise(confirmed = sum(Confirmed)) %>% 
+  as.data.frame()
+```
+
+---
+
+```{r}
+hist(confirmed_by_country$confirmed, breaks = 30)
+```
+
 ## Using density plot to explore the shape of numeric univariate data
 
 ```{r}
 plot(density(vti))
+```
+
+---
+
+```{r}
+plot(density(aapl))
+```
+
+---
+
+```{r}
+plot(density(confirmed_by_country$confirmed))
 ```
 
 ## Combining histogram and density plot to explore the shape of numeric univariate data
@@ -71,10 +146,30 @@ hist(vti, probability = TRUE, breaks = 30)
 lines(dens)
 ```
 
+---
+
+```{r}
+dens <- density(aapl)
+hist(aapl, probability = TRUE, breaks = 30)
+lines(dens)
+```
+
 ## Using quantile plot to explore the shape of numeric univariate data
 
 ```{r}
 qqnorm(vti)
+```
+
+---
+
+```{r}
+qqnorm(aapl)
+```
+
+---
+
+```{r}
+qqnorm(confirmed_by_country$confirmed)
 ```
 
 ## Using box plot to explore the shape of numeric univariate data
@@ -83,44 +178,85 @@ qqnorm(vti)
 boxplot(vti)
 ```
 
+---
+
+```{r}
+boxplot(aapl)
+```
+
 ## Using bar plot to explore tabulating of categorical univariate data
 
 ```{r}
-price_diff <- diff(vti)
-is_rise <- price_diff >= 0
-table_is_rise <- table(is_rise)
+diff_vti <- diff(vti)
+is_rise <- diff_vti > 0
+table(is_rise)
+barplot(table(is_rise), horiz = TRUE, main = "VTI")
 ```
 
 ---
 
 ```{r}
-barplot(table_is_rise, horiz = TRUE)
+diff_aapl <- diff(aapl)
+is_rise <- diff_aapl > 0
+table(is_rise)
+barplot(table(is_rise), horiz = TRUE, main = "AAPL")
+```
+
+---
+
+```{r}
+n_rows <- table(daily_report[["Country_Region"]])
+n_rows <- sort(n_rows, decreasing = TRUE)
+barplot(n_rows[2:10], las=2)
 ```
 
 # Exploring bivariate data
-
-## Getting 2 vectors with real-world data
-
-```{r message=FALSE}
-start_date <- "2018-01-01"
-getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
-getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
-aapl <- as.vector(coredata(AAPL$AAPL.Close))
-amzn <- as.vector(coredata(AMZN$AMZN.Close))
-```
 
 ## Using line plot to explore the trend of bivariate data
 
 ---
 
 ```{r}
-plot(AAPL$AAPL.Close)
+plot(aapl)
 ```
 
 ---
 
 ```{r}
-plot(AMZN$AMZN.Close)
+plot(amzn)
+```
+
+## Adjusting the data format of Covid 19 time series
+
+```{r}
+library(tidyr)
+
+col_names <- colnames(time_series)
+cols_to_pivot <- col_names[5:length(col_names)]
+time_series_longer <- time_series %>% 
+  pivot_longer(cols = cols_to_pivot, names_to = "Date", values_to = "Confirmed") %>% 
+  as.data.frame()
+```
+
+## Transforming date column from character to Date
+
+```{r}
+date_col <- time_series_longer[["Date"]]
+date_col <- sub(pattern = "X", replacement = "", date_col)
+date_col <- as.Date(date_col, format = "%m.%d.%y")
+time_series_longer[["Date"]] <- date_col
+str(time_series_longer)
+```
+
+---
+
+```{r}
+library(dplyr)
+
+time_series_longer %>% 
+  filter(Country.Region == 'Taiwan*') %>% 
+  ggplot(aes(x = Date, y = Confirmed)) +
+    geom_line()
 ```
 
 ## Using scatter plot to explore the relationship of numeric bivariate data
@@ -133,17 +269,14 @@ plot(aapl, amzn)
 
 # Exploring multivariate data
 
-## Getting real-world multivariate data
+## Combining 2 data.frame objects
 
-```{r message=FALSE}
-start_date <- "2018-01-01"
-getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
-getSymbols(Symbols = "AMZN", from = start_date) # create a AMZN xts object in global environment
+```{r}
 aapl_df <- data.frame(AAPL)
 amzn_df <- data.frame(AMZN)
 ```
 
-## Combining 2 data.frame objects
+---
 
 ```{r}
 col_names <- c("Open", "High", "Low", "Close", "Volume", "Adjusted")
@@ -185,9 +318,11 @@ p
 ---
 
 ```{r}
-# different dot colors
-p <- ggplot(combined_df, aes(x = Volume, y = Adjusted, col = Ticker)) + 
-  geom_point()
+# different line colors
+p <- time_series_longer %>% 
+  filter(Country.Region %in% c("Taiwan*", "Japan", "Korea, South", "Singapore")) %>% 
+  ggplot(aes(x = Date, y = Confirmed, col = Country.Region)) +
+  geom_line()
 ```
 
 ---
@@ -200,8 +335,31 @@ p
 
 ```{r}
 # different boxes
-p <- ggplot(combined_df, aes(x = Ticker, y = Adjusted, col = Ticker)) + 
+p <- ggplot(combined_df, aes(x = Ticker, y = Adjusted, fill = Ticker)) + 
   geom_boxplot()
+```
+
+---
+
+```{r}
+p
+```
+
+---
+
+```{r}
+# different boxes
+p <- ggplot(combined_df, aes(x = Ticker, y = Adjusted, fill = Ticker)) + 
+  geom_boxplot()
+```
+
+---
+
+```{r}
+# different histograms
+p <- ggplot(combined_df, aes(x = Adjusted, fill = Ticker)) + 
+  geom_histogram(bins = 30) +
+  facet_wrap(~ Ticker, scales = "free")
 ```
 
 ---
