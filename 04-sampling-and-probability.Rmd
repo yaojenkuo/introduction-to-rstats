@@ -178,7 +178,88 @@ hist(dice_rolls, breaks = 0:6)
 
 # Probability rules
 
+## Probability of intersection
 
+$$
+P(A \; and \; B) = P(A) \times P(B)
+$$
 
-# Probability puzzle: Yahtzee
+## We can use operator `&` for intersection
 
+```{r}
+coin_A <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_B <- rbinom(n = 10000, size = 1, prob = 0.5)
+mean(coin_A == 1 & coin_B == 1) # Both coin_A and coin_B are heads
+```
+
+---
+
+```{r}
+0.5 * 0.5
+```
+
+## Probability of union
+
+$$
+P(A \; or \; B) = P(A) + P(B) - P(A \; and \; B)
+$$
+
+## We can use operator `|` for union
+
+```{r}
+coin_A <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_B <- rbinom(n = 10000, size = 1, prob = 0.5)
+mean(coin_A == 1 | coin_B == 1) # coin_A is head or coin_B is head
+```
+
+---
+
+```{r}
+(0.5 + 0.5) - 0.5*0.5
+```
+
+## Flipping 3 coins
+
+$$
+P(A \; and \; B \; and \; C) = P(A) \times P(B) \times P(C)
+$$
+
+---
+
+```{r}
+# intersection
+coin_A <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_B <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_C <- rbinom(n = 10000, size = 1, prob = 0.5)
+mean(coin_A == 1 & coin_B == 1 & coin_C == 1)
+```
+
+---
+
+```{r}
+0.5**3
+```
+
+---
+
+$$
+P(A \; or \; B \; or \; C) = P(A) + P(B) + P(C) - \\
+(P(A) \times P(B) + P(A) \times P(C) + P(B) \times P(C)) + \\
+P(A) \times P(B) \times P(C)
+$$
+
+---
+
+```{r}
+# union
+coin_A <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_B <- rbinom(n = 10000, size = 1, prob = 0.5)
+coin_C <- rbinom(n = 10000, size = 1, prob = 0.5)
+mean(coin_A == 1 | coin_B == 1 | coin_C == 1)
+```
+
+---
+
+```{r}
+(0.5 + 0.5 + 0.5) - (0.5**2 + 0.5**2 + 0.5**2) + 0.5**3
+```

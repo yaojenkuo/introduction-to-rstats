@@ -15,8 +15,9 @@
 - [R 程式設計](01-essential-r-programming.html)
 - [資料的樣態](02-data-in-stats.html)
 - [探索視覺化](03-exploring-data-in-stats.html)
-- [機率與分配]()
+- [機率與分配](04-sampling-and-probability.html)
 - [貝氏統計分析]()
+- [假設檢定]()
 
 ## 延伸閱讀
 
