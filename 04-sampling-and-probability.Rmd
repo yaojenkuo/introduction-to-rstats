@@ -263,3 +263,152 @@ mean(coin_A == 1 | coin_B == 1 | coin_C == 1)
 ```{r}
 (0.5 + 0.5 + 0.5) - (0.5**2 + 0.5**2 + 0.5**2) + 0.5**3
 ```
+
+# The birthday problem
+
+## What is the birthday problem
+
+> There is a room(classroom?) with n people in it. What is the probability that anyone shares the same birthday?
+
+## Assumptions of the birthday problem
+
+- Ignore February 29th
+- Each individual in the room is independent
+
+## Using `sample()` to draw 40 samples from `1:365`
+
+```{r}
+dates_in_a_year <- format(as.Date(1:365, origin = "2019-01-01"), "%m-%d")
+birthdays_num <- sample(1:365, size = 40, replace = TRUE)
+birthdays <- dates_in_a_year[birthdays_num]
+birthdays
+```
+
+## Extending the sampling to 10000 times
+
+```{r}
+counter <- 0
+for (i in 1:10000) {
+  birthdays_num <- sample(1:365, size = 40, replace = TRUE)
+  if (length(unique(birthdays_num)) < length(birthdays_num)) {
+    counter <- counter + 1
+  }
+}
+p_same_birthday <- counter / 10000
+p_same_birthday
+```
+
+## Defining a `p_same_birthday(n)` function which takes a single argument `n`
+
+```{r}
+p_same_birthday <- function(n, n_simulations = 10000) {
+  counter <- 0
+  for (i in 1:n_simulations) {
+    birthdays_num <- sample(1:365, size = n, replace = TRUE)
+    unique_birthdays_num <- unique(birthdays_num)
+    if (length(unique_birthdays_num) < length(birthdays_num)) {
+      counter <- counter + 1
+    }
+  }
+  p_same_birthday <- counter / n_simulations
+  return(p_same_birthday)
+}
+```
+
+## Simulating 50 classrooms with 1 to 50 students
+
+```{r}
+same_birthday_probs <- sapply(1:50, p_same_birthday)
+same_birthday_probs
+```
+
+---
+
+```{r}
+plot(same_birthday_probs)
+```
+
+# The Monty Hall problem
+
+## [21](https://www.imdb.com/title/tt0478087/>)
+
+![Imgur](https://i.imgur.com/ZVdb45s.jpg)
+
+## Contestant randomly pick 1 from 3 doors
+
+```{r}
+initial_pick <- sample(1:3, size = 1)
+initial_pick
+```
+
+## Monty Hall will then reveal an empty door
+
+Ask the contestant, "stick or switch?"
+
+## Simulating the winning probability of "stick"
+
+```{r}
+winning_prob_stick <- function(n_simulations = 10000) {
+  doors <- c(1,2,3)
+  n_wins <- 0
+  for(i in 1:n_simulations){
+    prize <- sample(doors, size = 1)
+    initial_pick <- sample(doors, size = 1)
+    if(initial_pick == prize){
+      n_wins <- n_wins + 1
+    }
+  }
+  winning_prob <- n_wins / n_simulations
+  return(winning_prob)
+}
+```
+
+---
+
+```{r}
+winning_prob_stick()
+```
+
+## The "reveal strategy" of Monty Hall
+
+- If the initially pick is correct, then Monty Hall will choose one of the other two doors at random to reveal
+- If the initially pick is incorrect, then the host will simply reveal the other incorrect door, nothing random at this point
+
+---
+
+```{r}
+reveal_strategy <- function(doors, prize, initial_pick){
+  if (prize == initial_pick) {
+    reveal <- sample(x = doors[-prize], size = 1) # Sample at random from the two remaining doors
+  } else {
+    reveal <- doors[-c(prize, initial_pick)] # When the prize and initial pick are different, reveal the remaining door
+  }
+  return(reveal)
+}
+```
+
+## Simulating the winning probability of "switch"
+
+```{r}
+winning_prob_switch <- function(n_simulations = 10000) {
+  doors <- c(1,2,3)
+  n_wins <- 0
+  for(i in 1:n_simulations){
+    prize <- sample(doors, size = 1)
+    initial_pick <- sample(doors, size = 1)
+    reveal <- reveal_strategy(doors, prize, initial_pick) # reveal according to reveal_strategy
+    final_pick <- doors[c(-initial_pick, -reveal)] # switch
+    if (final_pick == prize) {
+      n_wins <- n_wins + 1
+    }
+  }
+  winning_prob <- n_wins / n_simulations
+  return(winning_prob)
+}
+```
+
+---
+
+```{r}
+winning_prob_switch()
+```
