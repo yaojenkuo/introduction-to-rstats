@@ -330,7 +330,7 @@ plot(same_birthday_probs)
 
 # The Monty Hall problem
 
-## [21](https://www.imdb.com/title/tt0478087/>)
+## [21](https://www.imdb.com/title/tt0478087/)
 
 ![Imgur](https://i.imgur.com/ZVdb45s.jpg)
 
