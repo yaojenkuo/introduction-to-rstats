@@ -16,8 +16,8 @@
 - [資料的樣態](02-data-in-stats.html)
 - [探索視覺化](03-exploring-data-in-stats.html)
 - [機率與分配](04-sampling-and-probability.html)
-- [貝氏統計分析]()
-- [假設檢定]()
+- [貝氏統計分析](05-bayesian-statistics.html)
+- [假設檢定](06-hypothesis-testing-in-r.html)
 
 ## 延伸閱讀
 
