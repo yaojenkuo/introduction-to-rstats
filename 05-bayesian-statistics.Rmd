@@ -1,0 +1,231 @@
+---
+title: "Bayesian Statistics"
+author: 郭耀仁 Yao-Jen Kuo
+date: "`r Sys.Date()`"
+output:
+  revealjs::revealjs_presentation:
+    theme: night
+    highlight: zenburn
+    center: true
+    reveal_options:
+      self_contained: true
+      previewLinks: true
+      slideNumber: true
+---
+
+# What is Bayesian statistics
+
+## The definition
+
+Bayesian statistics is a mathematically rigorous method for updating your beliefs based on evidence.
+
+## Bayes' Theorem
+
+$$
+P(A | B) = \frac{P(B|A)P(A)}{P(B)}
+$$
+
+## Revisiting the Monty Hall problem
+
+$$
+C_i: \text{Car is at the i-th door } \\
+H_i: \text{The host opens the i-th door} \\
+X_i: \text{The contestant chooses the i-th door}
+$$
+
+## The winning probability of "stick"
+
+$$
+P(C_1|H_3 \; and \; X_1)
+$$
+
+## The winning probability of "switch"
+
+$$
+P(C_2|H_3 \; and \; X_1)
+$$
+
+## Calculating the winning probability of "stick"
+
+$$
+P(C_1|H_3 \; and \; X_1) = \frac{P(H_3|C_1 \; and \; X_1)P(C_1 \; and \; X_1)}{P(H_3 \; and \; X_1)} = \frac{\frac{1}{2} \times P(C_1 \; and \; X_1)}{P(H_3) \times P(X_1)} \\
+= \frac{\frac{1}{2} \times P(C_1) \times P(X_1)}{P(H_3) \times P(X_1)} = \frac{\frac{1}{2} \times \frac{1}{3} \times 1}{\frac{1}{2} \times 1} = \frac{1}{3}
+$$
+
+## Calculating the winning probability of "switch"
+
+$$
+P(C_2|H_3 \; and \; X_1) = \frac{P(H_3|C_2 \; and \; X_1)P(C_2 \; and \; X_1)}{P(H_3 \; and \; X_1)} = \frac{1 \times P(C_2 \; and \; X_1)}{P(H_3) \times P(X_1)} \\
+= \frac{1 \times P(C_2) \times P(X_1)}{P(H_3) \times P(X_1)} = \frac{1 \times \frac{1}{3} \times 1}{\frac{1}{2} \times 1} = \frac{2}{3}
+$$
+
+# Updating from evidence
+
+## For example: Is my coin fair?
+
+```{r}
+p_head_fair <- 0.5
+p_head_biased <- 0.75
+fair_coin <- rbinom(10000, 1, prob = p_head_fair)
+biased_coin <- rbinom(10000, 1, prob = p_head_biased)
+n_heads_fair <- sum(fair_coin)
+n_heads_biased <- sum(biased_coin)
+n_heads_fair
+n_heads_biased
+```
+
+## The probability of flipping a head: $P(Head)$
+
+```{r}
+p_head <- (n_heads_fair + n_heads_biased) / (length(fair_coin) + length(biased_coin))
+p_head
+```
+
+## The probability of flipping a fair coin: $P(Fair)$
+
+```{r}
+p_fair <- length(fair_coin) / (length(fair_coin) + length(biased_coin))
+p_fair
+```
+
+## Given a flip of head, what is the probability that it is a fair coin?
+
+$$
+P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
+$$
+
+```{r}
+p_head_fair * p_fair / p_head
+```
+
+## Given a flip of head, what is the probability that it is a biased coin?
+
+$$
+P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
+$$
+
+```{r}
+p_biased <- length(biased_coin) / (length(fair_coin) + length(biased_coin))
+p_head_biased * p_biased / p_head
+```
+
+## Is my coin fair? Coins with different flips
+
+```{r}
+p_head_fair <- 0.5
+p_head_biased <- 0.75
+fair_coin <- rbinom(10000, 1, prob = p_head_fair)
+biased_coin <- rbinom(5000, 1, prob = p_head_biased)
+n_heads_fair <- sum(fair_coin)
+n_heads_biased <- sum(biased_coin)
+n_heads_fair
+n_heads_biased
+```
+
+## The probability of flipping a head: $P(Head)$
+
+```{r}
+p_head <- (n_heads_fair + n_heads_biased) / (length(fair_coin) + length(biased_coin))
+p_head
+```
+
+## The probability of flipping a fair coin: $P(Fair)$
+
+```{r}
+p_fair <- length(fair_coin) / (length(fair_coin) + length(biased_coin))
+p_fair
+```
+
+## Given a flip of head, what is the probability that it is a fair coin?
+
+$$
+P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
+$$
+
+```{r}
+p_head_fair * p_fair / p_head
+```
+
+## Given a flip of head, what is the probability that it is a biased coin?
+
+$$
+P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
+$$
+
+```{r}
+p_biased <- length(biased_coin) / (length(fair_coin) + length(biased_coin))
+p_head_biased * p_biased / p_head
+```
+
+# Bayes’s theorem in a discrete case
+
+## Our prior knowledge about a stock
+
+The price will rise on any given day is either 0.4 or 0.6.
+
+$$
+P(\theta = 0.4) = 0.5 \\
+P(\theta = 0.6) = 0.5
+$$
+
+## Say, we observe the stock for five consecutive days of price rise
+
+$$
+A = \text{The event that the prices rises on five consecutive days}
+$$
+
+## We may suspect that $\theta$ is 0.6, not 0.4
+
+$$
+P(\theta=0.6|A) = \frac{P(A|\theta=0.6)P(\theta=0.6)}{P(A)} \\
+\frac{P(A|\theta=0.6)P(\theta=0.6)}{P(A|\theta=0.6)P(\theta=0.6) + P(A|\theta=0.4)P(\theta=0.4)} \\
+= \frac{(0.6)^5(0.5)}{(0.6)^5(0.5) + (0.4)^5(0.5)} = 0.8836
+$$
+
+## Our belief that $\theta$ is 0.6 was 0.5 before event A, but is 0.8836 after observing event.
+
+---
+
+```{r}
+library(quantmod)
+
+start_date <- "2018-01-01"
+getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in global environment
+aapl <- as.vector(coredata(AAPL$AAPL.Adjusted)) # extract adjusted prices as a vector
+diff_aapl <- diff(aapl)
+is_rise <- diff_aapl > 0
+prop.table(table(is_rise))
+```
+
+## Our prior knowledge about AAPL
+
+$$
+P(\theta = 0.55) = 0.8 \\
+P(\theta = 0.5) = 0.2
+$$
+
+## The observation $A$
+
+```{r}
+is_rise[(length(is_rise) - 4):length(is_rise)]
+```
+
+## We may suspect that $\theta$ is 0.5, not 0.55
+
+$$
+P(\theta=0.5|A) = \frac{P(A|\theta=0.5)P(\theta=0.5)}{P(A)} \\
+\frac{P(A|\theta=0.5)P(\theta=0.5)}{P(A|\theta=0.5)P(\theta=0.5) + P(A|\theta=0.55)P(\theta=0.55)}
+$$
+
+```{r}
+p_conditional <- (0.5^5)*0.2 / ((0.5^5)*0.2 + (0.55^2 * 0.45^3)*0.8)
+p_conditional
+```
+
+## Our belief that $\theta$ is 0.5 was 0.2 before event A, but is `r p_conditional` after observing event.
+
+## The importance of Bayes’s theorem
+
+- It tells us exactly how to update our beliefs in light of new information
+- Revising beliefs after receiving additional information is something that humans do poorly
+- There is a human tendency to put either too little or too much emphasis on new information
