@@ -189,6 +189,13 @@ z_stats <= max(not_reject_region) & z_stats >= min(not_reject_region)
 
 The test statistic `r z_stats` which lies between the critical values of `r -z_half_alpha` and `r z_half_alpha`. Hence, at .05 significance level, we do not reject the claim that our dice is fair. Say, our dice is fair.
 
+---
+
+```{r}
+t_test <- t.test(dice_rolls, mu = mean(1:6), alternative = "two.sided")
+t_test$p.value < 0.05 # Do not reject null hypothesis
+```
+
 ## Is my dice fair? Calculate the testing statistic
 
 ```{r}
@@ -207,6 +214,13 @@ z_stats <= max(not_reject_region) & z_stats >= min(not_reject_region)
 ```
 
 The test statistic `r z_stats` which lies outside the critical values of `r -z_half_alpha` and `r z_half_alpha`. Hence, at .05 significance level, we reject the claim that our dice is fair. Say, our dice is biased.
+
+---
+
+```{r}
+t_test <- t.test(dice_rolls, mu = mean(1:6), alternative = "two.sided")
+t_test$p.value < 0.05 # Reject null hypothesis
+```
 
 ## More simple hypothesis testing examples: Is the time traveler a nut?
 
@@ -249,14 +263,14 @@ $$
 
 ## Is the time traveler a nut? Calculate the testing statistic
 
-The $z$ statistic for mean.
+The $t$ statistic for mean.
 
 ```{r}
 x_bar <- sample_mean_price
 mu_0 <- 300
 n <- dim(AAPL["202003"])[1]
-z_stats <- (x_bar - mu_0) / (sd(AAPL["202003"]$AAPL.Adjusted)/sqrt(n))
-z_stats
+t_stats <- (x_bar - mu_0) / (sd(AAPL["202003"]$AAPL.Adjusted)/sqrt(n))
+t_stats
 ```
 
 ## Is the time traveler a nut? Check if the testing statistic lies within rejection region
@@ -276,6 +290,14 @@ z_stats >= z_alpha
 ```
 
 The test statistic `r z_stats` is not larger than the critical value of `r z_alpha`. Hence, at .05 significance level, we do not reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
+
+---
+
+```{r}
+sampled_aapl_adjusted <- as.vector(AAPL["202003"]$AAPL.Adjusted)
+t_test <- t.test(sampled_aapl_adjusted, mu = 300, alternative = "greater")
+t_test$p.value < 0.05 # Do not reject null hypothesis
+```
 
 ## From a time traveler's view of point
 
@@ -306,6 +328,13 @@ z_stats <= -z_alpha
 ```
 
 The test statistic `r z_stats` is less than the critical value of `r -z_alpha`. Hence, at .05 significance level, we reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
+
+---
+
+```{r}
+t_test <- t.test(sampled_aapl_adjusted, mu = 300, alternative = "less")
+t_test$p.value < 0.05 # Reject null hypothesis
+```
 
 ## From a time traveler's view of point, again.
 
