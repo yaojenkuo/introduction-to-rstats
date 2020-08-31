@@ -286,7 +286,7 @@ z_alpha
 ## Is the time traveler a nut? Reject or do not reject the null hypothesis
 
 ```{r}
-z_stats >= z_alpha
+t_stats > z_alpha
 ```
 
 The test statistic `r z_stats` is not larger than the critical value of `r z_alpha`. Hence, at .05 significance level, we do not reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
@@ -324,7 +324,7 @@ $$
 ---
 
 ```{r}
-z_stats <= -z_alpha
+t_stats < -z_alpha
 ```
 
 The test statistic `r z_stats` is less than the critical value of `r -z_alpha`. Hence, at .05 significance level, we reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
