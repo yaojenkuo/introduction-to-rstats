@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="郭耀仁 Yao-Jen Kuo" />
-  <meta name="dcterms.date" content="2020-08-29" />
+  <meta name="dcterms.date" content="2020-09-02" />
   <title>Bayesian Statistics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1832,7 +1832,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <section>
     <h1 class="title">Bayesian Statistics</h1>
     <h2 class="author">郭耀仁 Yao-Jen Kuo</h2>
-    <h3 class="date">2020-08-29</h3>
+    <h3 class="date">2020-09-02</h3>
 </section>
 
 <section>
@@ -1898,15 +1898,15 @@ P(C_2|H_3 \; and \; X_1) = \frac{P(H_3|C_2 \; and \; X_1)P(C_2 \; and \; X_1)}{P
 <span id="cb1-5"><a href="#cb1-5"></a>n_heads_fair &lt;-<span class="st"> </span><span class="kw">sum</span>(fair_coin)</span>
 <span id="cb1-6"><a href="#cb1-6"></a>n_heads_biased &lt;-<span class="st"> </span><span class="kw">sum</span>(biased_coin)</span>
 <span id="cb1-7"><a href="#cb1-7"></a>n_heads_fair</span></code></pre></div>
-<pre><code>## [1] 5005</code></pre>
+<pre><code>## [1] 5001</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>n_heads_biased</span></code></pre></div>
-<pre><code>## [1] 7501</code></pre>
+<pre><code>## [1] 7518</code></pre>
 </section>
 <section id="the-probability-of-flipping-a-head-phead" class="slide level2">
 <h2>The probability of flipping a head: <span class="math inline">\(P(Head)\)</span></h2>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>p_head &lt;-<span class="st"> </span>(n_heads_fair <span class="op">+</span><span class="st"> </span>n_heads_biased) <span class="op">/</span><span class="st"> </span>(<span class="kw">length</span>(fair_coin) <span class="op">+</span><span class="st"> </span><span class="kw">length</span>(biased_coin))</span>
 <span id="cb5-2"><a href="#cb5-2"></a>p_head</span></code></pre></div>
-<pre><code>## [1] 0.6253</code></pre>
+<pre><code>## [1] 0.62595</code></pre>
 </section>
 <section id="the-probability-of-flipping-a-fair-coin-pfair" class="slide level2">
 <h2>The probability of flipping a fair coin: <span class="math inline">\(P(Fair)\)</span></h2>
@@ -1920,7 +1920,7 @@ P(C_2|H_3 \; and \; X_1) = \frac{P(H_3|C_2 \; and \; X_1)P(C_2 \; and \; X_1)}{P
 P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
 \]</span></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>p_head_fair <span class="op">*</span><span class="st"> </span>p_fair <span class="op">/</span><span class="st"> </span>p_head</span></code></pre></div>
-<pre><code>## [1] 0.3998081</code></pre>
+<pre><code>## [1] 0.3993929</code></pre>
 </section>
 <section id="given-a-flip-of-head-what-is-the-probability-that-it-is-a-biased-coin" class="slide level2">
 <h2>Given a flip of head, what is the probability that it is a biased coin?</h2>
@@ -1929,7 +1929,7 @@ P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 \]</span></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>p_biased &lt;-<span class="st"> </span><span class="kw">length</span>(biased_coin) <span class="op">/</span><span class="st"> </span>(<span class="kw">length</span>(fair_coin) <span class="op">+</span><span class="st"> </span><span class="kw">length</span>(biased_coin))</span>
 <span id="cb11-2"><a href="#cb11-2"></a>p_head_biased <span class="op">*</span><span class="st"> </span>p_biased <span class="op">/</span><span class="st"> </span>p_head</span></code></pre></div>
-<pre><code>## [1] 0.5997121</code></pre>
+<pre><code>## [1] 0.5990894</code></pre>
 </section>
 <section id="is-my-coin-fair-coins-with-different-flips" class="slide level2">
 <h2>Is my coin fair? Coins with different flips</h2>
@@ -1940,15 +1940,15 @@ P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 <span id="cb13-5"><a href="#cb13-5"></a>n_heads_fair &lt;-<span class="st"> </span><span class="kw">sum</span>(fair_coin)</span>
 <span id="cb13-6"><a href="#cb13-6"></a>n_heads_biased &lt;-<span class="st"> </span><span class="kw">sum</span>(biased_coin)</span>
 <span id="cb13-7"><a href="#cb13-7"></a>n_heads_fair</span></code></pre></div>
-<pre><code>## [1] 5043</code></pre>
+<pre><code>## [1] 4991</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>n_heads_biased</span></code></pre></div>
-<pre><code>## [1] 3764</code></pre>
+<pre><code>## [1] 3763</code></pre>
 </section>
 <section id="the-probability-of-flipping-a-head-phead-1" class="slide level2">
 <h2>The probability of flipping a head: <span class="math inline">\(P(Head)\)</span></h2>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>p_head &lt;-<span class="st"> </span>(n_heads_fair <span class="op">+</span><span class="st"> </span>n_heads_biased) <span class="op">/</span><span class="st"> </span>(<span class="kw">length</span>(fair_coin) <span class="op">+</span><span class="st"> </span><span class="kw">length</span>(biased_coin))</span>
 <span id="cb17-2"><a href="#cb17-2"></a>p_head</span></code></pre></div>
-<pre><code>## [1] 0.5871333</code></pre>
+<pre><code>## [1] 0.5836</code></pre>
 </section>
 <section id="the-probability-of-flipping-a-fair-coin-pfair-1" class="slide level2">
 <h2>The probability of flipping a fair coin: <span class="math inline">\(P(Fair)\)</span></h2>
@@ -1962,7 +1962,7 @@ P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
 \]</span></p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>p_head_fair <span class="op">*</span><span class="st"> </span>p_fair <span class="op">/</span><span class="st"> </span>p_head</span></code></pre></div>
-<pre><code>## [1] 0.5677302</code></pre>
+<pre><code>## [1] 0.5711675</code></pre>
 </section>
 <section id="given-a-flip-of-head-what-is-the-probability-that-it-is-a-biased-coin-1" class="slide level2">
 <h2>Given a flip of head, what is the probability that it is a biased coin?</h2>
@@ -1971,7 +1971,7 @@ P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 \]</span></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>p_biased &lt;-<span class="st"> </span><span class="kw">length</span>(biased_coin) <span class="op">/</span><span class="st"> </span>(<span class="kw">length</span>(fair_coin) <span class="op">+</span><span class="st"> </span><span class="kw">length</span>(biased_coin))</span>
 <span id="cb23-2"><a href="#cb23-2"></a>p_head_biased <span class="op">*</span><span class="st"> </span>p_biased <span class="op">/</span><span class="st"> </span>p_head</span></code></pre></div>
-<pre><code>## [1] 0.4257977</code></pre>
+<pre><code>## [1] 0.4283756</code></pre>
 </section></section>
 <section>
 <section id="bayess-theorem-in-a-discrete-case" class="title-slide slide level1">
@@ -2028,14 +2028,14 @@ P(\theta=0.6|A) = \frac{P(A|\theta=0.6)P(\theta=0.6)}{P(A)} \\
 <pre><code>## [1] &quot;AAPL&quot;</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>aapl &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">coredata</span>(AAPL<span class="op">$</span>AAPL.Adjusted)) <span class="co"># extract adjusted prices as a vector</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>diff_aapl &lt;-<span class="st"> </span><span class="kw">diff</span>(aapl)</span>
-<span id="cb35-3"><a href="#cb35-3"></a>is_rise &lt;-<span class="st"> </span>diff_aapl <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="kw">prop.table</span>(<span class="kw">table</span>(is_rise))</span></code></pre></div>
-<pre><code>## is_rise
-##     FALSE      TRUE 
-## 0.4499253 0.5500747</code></pre>
+<span id="cb35-3"><a href="#cb35-3"></a>is_rise &lt;-<span class="st"> </span>diff_aapl <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></span></code></pre></div>
 </section>
 <section id="our-prior-knowledge-about-aapl" class="slide level2">
 <h2>Our prior knowledge about AAPL</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">prop.table</span>(<span class="kw">table</span>(is_rise))</span></code></pre></div>
+<pre><code>## is_rise
+##     FALSE      TRUE 
+## 0.4485842 0.5514158</code></pre>
 <p><span class="math display">\[
 P(\theta = 0.55) = 0.8 \\
 P(\theta = 0.5) = 0.2
@@ -2043,8 +2043,8 @@ P(\theta = 0.5) = 0.2
 </section>
 <section id="the-observation-a" class="slide level2">
 <h2>The observation <span class="math inline">\(A\)</span></h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>is_rise[(<span class="kw">length</span>(is_rise) <span class="op">-</span><span class="st"> </span><span class="dv">4</span>)<span class="op">:</span><span class="kw">length</span>(is_rise)]</span></code></pre></div>
-<pre><code>## [1]  TRUE FALSE  TRUE FALSE FALSE</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>is_rise[(<span class="kw">length</span>(is_rise) <span class="op">-</span><span class="st"> </span><span class="dv">4</span>)<span class="op">:</span><span class="kw">length</span>(is_rise)]</span></code></pre></div>
+<pre><code>## [1]  TRUE FALSE FALSE  TRUE  TRUE</code></pre>
 </section>
 <section id="we-may-suspect-that-theta-is-0.5-not-0.55" class="slide level2">
 <h2>We may suspect that <span class="math inline">\(\theta\)</span> is 0.5, not 0.55</h2>
@@ -2052,8 +2052,8 @@ P(\theta = 0.5) = 0.2
 P(\theta=0.5|A) = \frac{P(A|\theta=0.5)P(\theta=0.5)}{P(A)} \\
 \frac{P(A|\theta=0.5)P(\theta=0.5)}{P(A|\theta=0.5)P(\theta=0.5) + P(A|\theta=0.55)P(\theta=0.55)}
 \]</span></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>p_conditional &lt;-<span class="st"> </span>(<span class="fl">0.5</span><span class="op">^</span><span class="dv">5</span>)<span class="op">*</span><span class="fl">0.2</span> <span class="op">/</span><span class="st"> </span>((<span class="fl">0.5</span><span class="op">^</span><span class="dv">5</span>)<span class="op">*</span><span class="fl">0.2</span> <span class="op">+</span><span class="st"> </span>(<span class="fl">0.55</span><span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.45</span><span class="op">^</span><span class="dv">3</span>)<span class="op">*</span><span class="fl">0.8</span>)</span>
-<span id="cb39-2"><a href="#cb39-2"></a>p_conditional</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>p_conditional &lt;-<span class="st"> </span>(<span class="fl">0.5</span><span class="op">^</span><span class="dv">5</span>)<span class="op">*</span><span class="fl">0.2</span> <span class="op">/</span><span class="st"> </span>((<span class="fl">0.5</span><span class="op">^</span><span class="dv">5</span>)<span class="op">*</span><span class="fl">0.2</span> <span class="op">+</span><span class="st"> </span>(<span class="fl">0.55</span><span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="fl">0.45</span><span class="op">^</span><span class="dv">3</span>)<span class="op">*</span><span class="fl">0.8</span>)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>p_conditional</span></code></pre></div>
 <pre><code>## [1] 0.2208305</code></pre>
 </section>
 <section id="our-belief-that-theta-is-0.5-was-0.2-before-event-a-but-is-0.2208305-after-observing-event." class="slide level2">

@@ -194,10 +194,13 @@ getSymbols(Symbols = "AAPL", from = start_date) # create a AAPL xts object in gl
 aapl <- as.vector(coredata(AAPL$AAPL.Adjusted)) # extract adjusted prices as a vector
 diff_aapl <- diff(aapl)
 is_rise <- diff_aapl > 0
-prop.table(table(is_rise))
 ```
 
 ## Our prior knowledge about AAPL
+
+```{r}
+prop.table(table(is_rise))
+```
 
 $$
 P(\theta = 0.55) = 0.8 \\
