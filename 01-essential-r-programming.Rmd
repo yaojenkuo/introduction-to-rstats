@@ -169,14 +169,13 @@ if (LOGICAL_1) {
 ---
 
 ```{r}
-wanna_fight <- FALSE
-dancing_room_is_open <- FALSE
-if (wanna_fight) {
-  print("要打，先看練舞室有沒有開放。")
-} else if (dancing_room_is_open) {
-  print("要打，練舞室又有開放就去練舞室打！")
+random_int <- 3
+if (random_int %% 3 == 1) {
+  print("餘數為 1")
+} else if (random_int %% 3 == 2) {
+  print("餘數為 2")
 } else {
-  print("那就不要打架。")
+  print("整除")
 }
 ```
 

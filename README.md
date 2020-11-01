@@ -4,7 +4,7 @@
 >
 > https://www.sli.do #49493
 >
-> yaojenkuo@datainpoint.com
+> 郭耀仁 <yaojenkuo@datainpoint.com> from [DATAINPOINT](https://www.datainpoint.com/)
 
 ## 課程環境
 
@@ -24,8 +24,3 @@
 - [輕鬆學習 R 語言](https://www.datainpoint.com/r-essentials/)
 - [Introductory Statistics with R](https://www.amazon.com/Introductory-Statistics-R-Computing/dp/0387790535)
 - [DataCamp](https://www.datacamp.com/search?q=R&tap_a=5644-dce66f&tap_s=194899-1fb421&utm_medium=affiliate&utm_source=tonykuo)
-
-
-## 課程錄影清單
-
-- [330 期假日專題班，台大資工系 204 教室，台大資訊系統訓練班](https://www.youtube.com/playlist?list=PLEq7iw5uOtuUCcEpHpznqBdbla6X6vSit)
