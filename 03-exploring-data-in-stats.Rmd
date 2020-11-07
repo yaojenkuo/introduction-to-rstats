@@ -1,7 +1,7 @@
 ---
 title: "Exploring Data in Statistics"
 author: 郭耀仁 Yao-Jen Kuo
-date: "`r Sys.Date()`"
+#date: "`r Sys.Date()`"
 output:
   revealjs::revealjs_presentation:
     theme: night
@@ -93,6 +93,8 @@ time_series <- read_time_series()
 
 ## Using `hist()` to explore the shape of numeric univariate data
 
+---
+
 ```{r}
 hist(vti, breaks = 30)
 ```
@@ -122,6 +124,8 @@ hist(confirmed_by_country$confirmed, breaks = 30)
 
 ## Using density plot to explore the shape of numeric univariate data
 
+---
+
 ```{r}
 plot(density(vti))
 ```
@@ -140,6 +144,8 @@ plot(density(confirmed_by_country$confirmed))
 
 ## Combining histogram and density plot to explore the shape of numeric univariate data
 
+---
+
 ```{r}
 dens <- density(vti)
 hist(vti, probability = TRUE, breaks = 30)
@@ -155,6 +161,8 @@ lines(dens)
 ```
 
 ## Using quantile plot to explore the shape of numeric univariate data
+
+---
 
 ```{r}
 qqnorm(vti)
@@ -174,6 +182,8 @@ qqnorm(confirmed_by_country$confirmed)
 
 ## Using box plot to explore the shape of numeric univariate data
 
+---
+
 ```{r}
 boxplot(vti)
 ```
@@ -190,6 +200,11 @@ boxplot(aapl)
 diff_vti <- diff(vti)
 is_rise <- diff_vti > 0
 table(is_rise)
+```
+
+---
+
+```{r}
 barplot(table(is_rise), horiz = TRUE, main = "VTI")
 ```
 
@@ -199,6 +214,11 @@ barplot(table(is_rise), horiz = TRUE, main = "VTI")
 diff_aapl <- diff(aapl)
 is_rise <- diff_aapl > 0
 table(is_rise)
+```
+
+---
+
+```{r}
 barplot(table(is_rise), horiz = TRUE, main = "AAPL")
 ```
 
@@ -253,10 +273,16 @@ str(time_series_longer)
 ```{r}
 library(dplyr)
 
-time_series_longer %>% 
+p <- time_series_longer %>% 
   filter(Country.Region == 'Taiwan*') %>% 
   ggplot(aes(x = Date, y = Confirmed)) +
     geom_line()
+```
+
+---
+
+```{r}
+p
 ```
 
 ## Using scatter plot to explore the relationship of numeric bivariate data
