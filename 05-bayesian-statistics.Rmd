@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Statistics"
 author: 郭耀仁 Yao-Jen Kuo
-date: "`r Sys.Date()`"
+#date: "`r Sys.Date()`"
 output:
   revealjs::revealjs_presentation:
     theme: night
@@ -22,7 +22,7 @@ Bayesian statistics is a mathematically rigorous method for updating your belief
 ## Bayes' Theorem
 
 $$
-P(A | B) = \frac{P(B|A)P(A)}{P(B)}
+P(A | B) = \frac{P(A,B)}{P(B)} = \frac{P(B|A)P(A)}{P(B)}
 $$
 
 ## Revisiting the Monty Hall problem
@@ -36,27 +36,25 @@ $$
 ## The winning probability of "stick"
 
 $$
-P(C_1|H_3 \; and \; X_1)
+P(C_1|H_3,X_1)
 $$
 
 ## The winning probability of "switch"
 
 $$
-P(C_2|H_3 \; and \; X_1)
+P(C_2|H_3,X_1)
 $$
 
 ## Calculating the winning probability of "stick"
 
 $$
-P(C_1|H_3 \; and \; X_1) = \frac{P(H_3|C_1 \; and \; X_1)P(C_1 \; and \; X_1)}{P(H_3 \; and \; X_1)} = \frac{\frac{1}{2} \times P(C_1 \; and \; X_1)}{P(H_3) \times P(X_1)} \\
-= \frac{\frac{1}{2} \times P(C_1) \times P(X_1)}{P(H_3) \times P(X_1)} = \frac{\frac{1}{2} \times \frac{1}{3} \times 1}{\frac{1}{2} \times 1} = \frac{1}{3}
+P(C_1|H_3, X_1) = \frac{P(C_1, H_3, X_1)}{P(H_3, X_1)} = \frac{P(H_3|C_1, X_1)P(C_1, X_1)}{P(H_3, X_1)} = \frac{\frac{1}{2} \times P(C_1, X_1)}{P(H_3) \times P(X_1)} = \frac{\frac{1}{2} \times P(C_1) \times P(X_1)}{P(H_3) \times 1} = \frac{\frac{1}{2} \times \frac{1}{3}}{\frac{1}{2}} = \frac{1}{3}
 $$
 
 ## Calculating the winning probability of "switch"
 
 $$
-P(C_2|H_3 \; and \; X_1) = \frac{P(H_3|C_2 \; and \; X_1)P(C_2 \; and \; X_1)}{P(H_3 \; and \; X_1)} = \frac{1 \times P(C_2 \; and \; X_1)}{P(H_3) \times P(X_1)} \\
-= \frac{1 \times P(C_2) \times P(X_1)}{P(H_3) \times P(X_1)} = \frac{1 \times \frac{1}{3} \times 1}{\frac{1}{2} \times 1} = \frac{2}{3}
+P(C_2|H_3, X_1) = \frac{P(C_2, H_3, X_1)}{P(H_3, X_1)} = \frac{P(H_3|C_2, X_1)P(C_2, X_1)}{P(H_3, X_1)} = \frac{1 \times P(C_2, X_1)}{P(H_3) \times P(X_1)} = \frac{1 \times P(C_2) \times P(X_1)}{P(H_3) \times 1} = \frac{\frac{1}{3}}{\frac{1}{2}} = \frac{2}{3}
 $$
 
 # Updating from evidence
@@ -91,7 +89,7 @@ p_fair
 ## Given a flip of head, what is the probability that it is a fair coin?
 
 $$
-P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
+P(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
 $$
 
 ```{r}
@@ -101,7 +99,7 @@ p_head_fair * p_fair / p_head
 ## Given a flip of head, what is the probability that it is a biased coin?
 
 $$
-P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
+P(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 $$
 
 ```{r}
@@ -139,7 +137,7 @@ p_fair
 ## Given a flip of head, what is the probability that it is a fair coin?
 
 $$
-P_(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
+P(Fair|Head) = \frac{P(Head|Fair)P(Fair)}{P(Head)}
 $$
 
 ```{r}
@@ -149,7 +147,7 @@ p_head_fair * p_fair / p_head
 ## Given a flip of head, what is the probability that it is a biased coin?
 
 $$
-P_(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
+P(Biased|Head) = \frac{P(Head|Biased)P(Biased)}{P(Head)}
 $$
 
 ```{r}

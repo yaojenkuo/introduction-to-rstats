@@ -1,7 +1,7 @@
 ---
 title: "Hypothesis Testing in R"
 author: 郭耀仁 Yao-Jen Kuo
-date: "`r Sys.Date()`"
+#date: "`r Sys.Date()`"
 output:
   revealjs::revealjs_presentation:
     theme: night
@@ -235,12 +235,12 @@ sample_mean_price
 
 ## Is the time traveler a nut?
 
-Suppose the time traveler claims that the mean adjusted price of AAPL is higher than 300 in 2020. In a sample data of March, it was found that they are `r sample_mean_price`.
+Suppose the time traveler claims that the mean adjusted price of AAPL is higher than 100 in 2020. In a sample data of March, it was found that they are `r sample_mean_price`.
 
 ## Is the time traveler a nut? State the hypothesis
 
-- Null hypothesis: the mean adjusted price of AAPL is not higher than 300 in 2020
-- Alternative hypothesis: the mean adjusted price of AAPL is higher than 300 in 2020
+- Null hypothesis: the mean adjusted price of AAPL is not higher than 100 in 2020
+- Alternative hypothesis: the mean adjusted price of AAPL is higher than 100 in 2020
 
 $$
 H_0: \mu = \mu_0 \\
@@ -267,7 +267,7 @@ The $t$ statistic for mean.
 
 ```{r}
 x_bar <- sample_mean_price
-mu_0 <- 300
+mu_0 <- 100
 n <- dim(AAPL["202003"])[1]
 t_stats <- (x_bar - mu_0) / (sd(AAPL["202003"]$AAPL.Adjusted)/sqrt(n))
 t_stats
@@ -289,13 +289,13 @@ z_alpha
 t_stats > z_alpha
 ```
 
-The test statistic `r z_stats` is not larger than the critical value of `r z_alpha`. Hence, at .05 significance level, we do not reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
+The test statistic `r z_stats` is not larger than the critical value of `r z_alpha`. Hence, at .05 significance level, we do not reject the null hypothesis that the mean adjusted price of AAPL is not higher than 100 in 2020.
 
 ---
 
 ```{r}
 sampled_aapl_adjusted <- as.vector(AAPL["202003"]$AAPL.Adjusted)
-t_test <- t.test(sampled_aapl_adjusted, mu = 300, alternative = "greater")
+t_test <- t.test(sampled_aapl_adjusted, mu = 100, alternative = "greater")
 t_test$p.value < 0.05 # Do not reject null hypothesis
 ```
 
@@ -305,12 +305,12 @@ We falsely accept a FALSE $H_0$.
 
 ## Is the time traveler a nut? Again!
 
-Suppose the time traveler claims that the mean adjusted price of AAPL is lower than 300 in 2020. In a sample data of March, it was found that they are `r sample_mean_price`.
+Suppose the time traveler claims that the mean adjusted price of AAPL is lower than 100 in 2020. In a sample data of March, it was found that they are `r sample_mean_price`.
 
 ---
 
-- Null hypothesis: the mean adjusted price of AAPL is not lower than 300 in 2020
-- Alternative hypothesis: the mean adjusted price of AAPL is lower than 300 in 2020
+- Null hypothesis: the mean adjusted price of AAPL is not lower than 100 in 2020
+- Alternative hypothesis: the mean adjusted price of AAPL is lower than 100 in 2020
 
 $$
 H_0: \mu = \mu_0 \\
@@ -327,12 +327,12 @@ $$
 t_stats < -z_alpha
 ```
 
-The test statistic `r z_stats` is less than the critical value of `r -z_alpha`. Hence, at .05 significance level, we reject the null hypothesis that the mean adjusted price of AAPL is not higher than 300 in 2020.
+The test statistic `r z_stats` is less than the critical value of `r -z_alpha`. Hence, at .05 significance level, we reject the null hypothesis that the mean adjusted price of AAPL is not higher than 100 in 2020.
 
 ---
 
 ```{r}
-t_test <- t.test(sampled_aapl_adjusted, mu = 300, alternative = "less")
+t_test <- t.test(sampled_aapl_adjusted, mu = 100, alternative = "less")
 t_test$p.value < 0.05 # Reject null hypothesis
 ```
 
